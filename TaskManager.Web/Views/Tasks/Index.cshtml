@@ -1,0 +1,33 @@
+﻿@model TaskManager.Web.Models.PagedResultViewModel<TaskManager.Web.Models.TaskViewModel>
+
+@{
+    ViewData["Title"] = "Tareas";
+}
+
+<h1>Tareas</h1>
+
+<p>Mostrando @Model.Items.Count() de @Model.TotalCount</p>  <!--  Mostrando registros de Registros totales -->
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Título</th>
+            <th>Categoría</th>
+            <th>Completada</th>
+            <th>Step</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var t in Model.Items)
+        {
+            <tr>
+                <td>@t.Id</td>
+                <td>@t.Title</td>
+                <td>@t.CategoryName</td>
+                <td>@(t.IsCompleted ? "Sí" : "No")</td>
+                <td>@t.Step</td>
+            </tr>
+        }
+    </tbody>
+</table>
