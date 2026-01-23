@@ -13,7 +13,7 @@ namespace TaskManager.Web.Controllers
             _client = client;
         }
 
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 10) // https:// localhost:7137/
         {
             var result = await _client.GetTasksAsync(page, pageSize);
             return View(result);
@@ -23,10 +23,12 @@ namespace TaskManager.Web.Controllers
         public async Task<IActionResult> Search(TaskSearchViewModel model)
         {
             // Si es la primera carga de la página
-            if (model.Page == 0)
+            if (model.Page == 0) // antes ==
                 model.Page = 1;
 
-            model.Result = await _client.SearchTasksAsync(model);
+            model.PageSize = 5; // modificar búsqueda a 5 resultados
+
+            model.Result = await _client.SearchTasksAsync(model); // se envía el modelo a la API
 
             return View("Index1", model);
         }

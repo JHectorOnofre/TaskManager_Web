@@ -10,7 +10,7 @@
         public int? Step { get; set; }
 
         public int Page { get; set; } = 1;
-        public int PageSize { get; set; } = 10;
+        public int PageSize { get; set; } = 5; // Paginación de 10 a 5 en la ruta /Task/Search 22ene
 
         // Resultados devueltos por la API
         public PagedResultViewModel<TaskViewModel>? Result { get; set; }
