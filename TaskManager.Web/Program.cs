@@ -4,7 +4,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
 builder.Services.AddApiClients();
 var app = builder.Build();
 
@@ -17,13 +16,14 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapStaticAssets();
-app.MapRazorPages()
-   .WithStaticAssets();
+//Esa línea define la ruta “clásica” (MVC) que ASP.NET Core usa para decidir qué controlador y qué acción ejecutar cuando llega una petición HTTP. Si llega una URL y no coincide con nada más específico,intenta interpretarla como:Controlador / Acción / Id opcional.
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Tasks}/{action=Index}/{id?}");
 
 app.Run();

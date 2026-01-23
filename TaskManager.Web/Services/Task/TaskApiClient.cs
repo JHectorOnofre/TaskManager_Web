@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Net.Http.Json;
 using TaskManager.Web.Models;
 
 namespace TaskManager.Web.Services
@@ -22,5 +23,43 @@ namespace TaskManager.Web.Services
 
             return result!;
         }
+
+        public async Task<PagedResultViewModel<TaskViewModel>> SearchTasksAsync(TaskSearchViewModel filters) // 21 ene
+        {
+            var query = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(filters.Text))
+                query.Add($"text={filters.Text}");
+
+            if (!string.IsNullOrWhiteSpace(filters.CategoryName))
+                query.Add($"categoryName={filters.CategoryName}");
+
+            if (filters.IsCompleted.HasValue)
+                query.Add($"isCompleted={filters.IsCompleted.Value}");
+
+            if (filters.Step.HasValue)
+                query.Add($"step={filters.Step.Value}");
+
+            query.Add($"page={filters.Page}");
+            query.Add($"pageSize={filters.PageSize}");
+
+            var finalQueryString = string.Join("&", query);
+
+            var url = $"/api/tasks/advanced-search?{finalQueryString}";
+
+            return await _httpClient.GetFromJsonAsync<PagedResultViewModel<TaskViewModel>>(url);
+        }
+
+        public async Task<bool> CreateTaskAsync(CreateTaskViewModel model)
+        {
+            var response = await _httpClient.PostAsJsonAsync( //manda petición POST con objeto JSTON al endpoint que se indica
+                "/api/tasks",
+                model
+            );
+
+            response.EnsureSuccessStatusCode(); // lanza una excepción si no es exitosa
+            return true; // mientras no se controlan excepciones
+        }
     }
 }
+
