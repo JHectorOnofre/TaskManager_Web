@@ -60,6 +60,35 @@ namespace TaskManager.Web.Services
             response.EnsureSuccessStatusCode(); // lanza una excepción si no es exitosa
             return true; // mientras no se controlan excepciones
         }
+
+        public async Task<EditTaskViewModel> GetTaskByIdAsync(int id) //23 ene
+        {
+            var response = await _httpClient.GetFromJsonAsync<TaskViewModel>($"/api/tasks/{id}");
+
+            return new EditTaskViewModel
+            {
+                Id = response.Id,
+                Title = response.Title,
+                CategoryId = response.CategoryId,
+                Step = response.Step,
+                IsCompleted = response.IsCompleted
+            };
+        }
+
+        public async Task UpdateTaskAsync(EditTaskViewModel model) //23 ene
+        {
+            var response = await _httpClient.PutAsJsonAsync(
+                $"/api/tasks/{model.Id}",
+                model
+            );
+
+            if (!response.IsSuccessStatusCode) // se verifica 
+            {
+                // Leer mensaje de la API
+                var error = await response.Content.ReadAsStringAsync();
+                throw new Exception(error);
+            }
+        }
     }
 }
 

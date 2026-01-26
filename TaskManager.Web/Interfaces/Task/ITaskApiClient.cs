@@ -8,6 +8,9 @@ namespace TaskManager.Web.Services
 
         Task<PagedResultViewModel<TaskViewModel>> SearchTasksAsync(TaskSearchViewModel filters); //21ene buscar tareas con filtro
 
-        Task<bool> CreateTaskAsync(CreateTaskViewModel model); 
+        Task<bool> CreateTaskAsync(CreateTaskViewModel model);
+
+        Task<EditTaskViewModel> GetTaskByIdAsync(int id); //23
+        Task UpdateTaskAsync(EditTaskViewModel model);
     }
 }

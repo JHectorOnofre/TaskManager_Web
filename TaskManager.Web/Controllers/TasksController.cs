@@ -51,5 +51,33 @@ namespace TaskManager.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+
+        [HttpGet] //23ene
+        public async Task<IActionResult> Edit(int id)
+        {
+            var model = await _client.GetTaskByIdAsync(id);
+            return View(model); // resultado de la vista
+        }
+
+
+        [HttpPost] //23ene
+        public async Task<IActionResult> Edit(EditTaskViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            try
+            {
+                await _client.UpdateTaskAsync(model);
+                TempData["Success"] = "La tarea fue actualizada correctamente.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Ocurrió un error: " + ex.Message);
+                return View(model); // ya viene con el mensaje de error
+            }
+        }
     }
 }

@@ -4,6 +4,14 @@
     ViewData["Title"] = "Tareas";
 }
 
+@if (TempData["Success"] != null) 
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+ <!-- Mensaje para el registro -->
+
 <h1>Tareas</h1>
 
 <p>Mostrando @Model.Items.Count() de @Model.TotalCount</p>
