@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TaskManager.Web.Models;
 using TaskManager.Web.Services;
 
 namespace TaskManager.Web.Controllers
@@ -11,11 +12,79 @@ namespace TaskManager.Web.Controllers
         {
             _client = client;
         }
-
+        /*
         public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
         {
             var result = await _client.GetTasksAsync(page, pageSize); //Retorna vista
             return View(result);    //En la vista retorna el resultado
+        }*/
+        //Arreglo DCC improvisado 230126
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
+        {
+            var model = new TaskSearchViewModel
+            {
+                Page = page,
+                PageSize = pageSize,
+                Result = await _client.GetTasksAsync(page, pageSize)
+            };
+
+            return View(model);
         }
+
+
+        public async Task<IActionResult> Search(TaskSearchViewModel model)
+        {
+            // Si es la primera carga de la página
+            if (model.Page == 0)
+                model.Page = 1;
+
+            model.Result = await _client.SearchTasksAsync(model);
+
+            return View("Index", model);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View(new CreateTaskViewModel());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateTaskViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            await _client.CreateTaskAsync(model);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet] 
+        public async Task<IActionResult> Edit(int id)
+        {
+            var model = await _client.GetTaskByIdAsync(id);
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditTaskViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            try
+            {
+                await _client.UpdateTaskAsync(model);
+                TempData["Success"] = "La tarea fue actualizada correctamente.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Ocurrió un error: " + ex.Message);
+                return View(model);
+            }
+        }
+    
+
     }
 }

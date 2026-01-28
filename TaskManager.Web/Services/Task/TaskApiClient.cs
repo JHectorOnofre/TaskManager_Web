@@ -7,6 +7,7 @@ namespace TaskManager.Web.Services
     {
         private readonly HttpClient _httpClient;
 
+       
         public TaskApiClient(HttpClient httpClient, IConfiguration configuration)
         {
             var baseUrl = configuration["ApiSettings:BaseUrl"];
@@ -22,5 +23,75 @@ namespace TaskManager.Web.Services
 
             return result!;
         }
+
+        public async Task<PagedResultViewModel<TaskViewModel>> SearchTasksAsync(TaskSearchViewModel filters)
+        {
+            var query = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(filters.Text))
+                query.Add($"text={filters.Text}");
+
+            if (!string.IsNullOrWhiteSpace(filters.CategoryName))
+                query.Add($"categoryName={filters.CategoryName}");
+
+            if (filters.IsCompleted.HasValue)
+                query.Add($"isCompleted={filters.IsCompleted.Value}");
+
+            if (filters.Step.HasValue)
+                query.Add($"step={filters.Step.Value}");
+
+            query.Add($"page={filters.Page}");
+            query.Add($"pageSize={filters.PageSize}");
+
+            var finalQueryString = string.Join("&", query);
+
+            var url = $"/api/tasks/advanced-search?{finalQueryString}";
+
+            return await _httpClient.GetFromJsonAsync<PagedResultViewModel<TaskViewModel>>(url);
+        }
+
+
+        // DIa 3 220126
+        public async Task<bool> CreateTaskAsync(CreateTaskViewModel model)
+        {
+            var response = await _httpClient.PostAsJsonAsync(
+                "/api/tasks",
+                model
+            );
+
+            response.EnsureSuccessStatusCode(); //Lanza Exception si no es exitosa
+            return true;
+        }
+        //GET
+        public async Task<EditTaskViewModel> GetTaskByIdAsync(int id)
+        {
+            var response = await _httpClient.GetFromJsonAsync<TaskViewModel>($"/api/tasks/{id}");
+
+            return new EditTaskViewModel
+            {
+                Id = response.Id,
+                Title = response.Title,
+                CategoryId = response.CategoryId,
+                Step = response.Step,
+                IsCompleted = response.IsCompleted
+            };
+        }
+
+        //POST
+        public async Task UpdateTaskAsync(EditTaskViewModel model)
+        {
+            var response = await _httpClient.PutAsJsonAsync(
+                $"/api/tasks/{model.Id}",
+                model
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                // Leer mensaje de la API
+                var error = await response.Content.ReadAsStringAsync();
+                throw new Exception(error);
+            }
+        }
+
     }
 }
