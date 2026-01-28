@@ -79,5 +79,22 @@ namespace TaskManager.Web.Controllers
                 return View(model); // ya viene con el mensaje de error
             }
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                await _client.DeleteTaskAsync(id);
+                TempData["Success"] = "La tarea fue eliminada correctamente.";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "No se pudo eliminar la tarea: " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

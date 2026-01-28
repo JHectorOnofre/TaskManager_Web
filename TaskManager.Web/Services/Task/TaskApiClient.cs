@@ -89,6 +89,19 @@ namespace TaskManager.Web.Services
                 throw new Exception(error);
             }
         }
+
+        public async Task<bool> DeleteTaskAsync(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"/api/tasks/{id}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                throw new Exception(error);
+            }
+
+            return true;
+        }
     }
 }
 

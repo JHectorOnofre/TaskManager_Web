@@ -10,13 +10,17 @@
 
     @if (TempData["Success"] != null)
     {
-        /* Añadimos clase alert */
-        <div class="alert alert-success">
-            @TempData["Success"]
-        </div>
+        <div class="alert alert-success">@TempData["Success"]</div>
     }
 
-    <h1>Tareas</h1>
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    <h1>Tareas
+        <a asp-action="Create" class="btn btn-sm btn-primary">Agregar</a>
+    </h1>
 
     <p>Mostrando @Model.Items.Count() de @Model.TotalCount</p>
 
@@ -29,6 +33,7 @@
                 <th>Categoría</th>
                 <th>Completada</th>
                 <th>Step</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -40,6 +45,16 @@
                     <td>@t.CategoryName</td>
                     <td>@(t.IsCompleted ? "Sí" : "No")</td>
                     <td>@t.Step</td>
+                    <td> <!--28ene-->
+                        <a asp-action="Edit" asp-route-id="@t.Id" class="btn btn-sm btn-primary">Editar</a>
+                        <form asp-action="Delete" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="@t.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('¿Estás seguro de que deseas eliminar esta tarea?');">
+                                Eliminar
+                            </button>
+                        </form>
+                    </td>
                 </tr>
             }
         </tbody>
