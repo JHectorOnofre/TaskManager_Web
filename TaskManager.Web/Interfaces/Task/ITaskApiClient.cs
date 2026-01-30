@@ -14,5 +14,7 @@ namespace TaskManager.Web.Services
         Task UpdateTaskAsync(EditTaskViewModel model);
 
         Task<bool> DeleteTaskAsync(int id);//28 ene
+
+        Task<TaskViewModel> GetTaskDetailAsync (int id);//30
     }
 }

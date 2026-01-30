@@ -46,6 +46,9 @@
                     <td>@(t.IsCompleted ? "Sí" : "No")</td>
                     <td>@t.Step</td>
                     <td> <!--28ene-->
+                        <a asp-controller="Tasks" asp-action="Details" asp-route-id="@t.Id" class="btn btn-sm btn-primary">
+                            Ver detalles
+                        </a>
                         <a asp-action="Edit" asp-route-id="@t.Id" class="btn btn-sm btn-primary">Editar</a>
                         <form asp-action="Delete" method="post" class="d-inline">
                             <input type="hidden" name="id" value="@t.Id" />

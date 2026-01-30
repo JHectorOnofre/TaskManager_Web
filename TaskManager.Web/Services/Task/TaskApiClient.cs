@@ -52,7 +52,7 @@ namespace TaskManager.Web.Services
 
         public async Task<bool> CreateTaskAsync(CreateTaskViewModel model)
         {
-            var response = await _httpClient.PostAsJsonAsync( //manda petición POST con objeto JSTON al endpoint que se indica
+            var response = await _httpClient.PostAsJsonAsync( //manda petición POST con objeto JSON al endpoint que se indica
                 "/api/tasks",
                 model
             );
@@ -60,7 +60,12 @@ namespace TaskManager.Web.Services
             response.EnsureSuccessStatusCode(); // lanza una excepción si no es exitosa
             return true; // mientras no se controlan excepciones
         }
+        public async Task<TaskViewModel> GetTaskDetailAsync(int id) //30 ene
+        {
+            return await _httpClient.GetFromJsonAsync<TaskViewModel>($"/api/tasks/{id}");
+        }
 
+         
         public async Task<EditTaskViewModel> GetTaskByIdAsync(int id) //23 ene
         {
             var response = await _httpClient.GetFromJsonAsync<TaskViewModel>($"/api/tasks/{id}");

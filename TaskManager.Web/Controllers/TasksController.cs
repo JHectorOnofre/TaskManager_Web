@@ -96,5 +96,20 @@ namespace TaskManager.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+
+        [HttpGet] // 30ene: 
+        public async Task<IActionResult> Details(int id)
+        {
+            var task = await _client.GetTaskDetailAsync(id);
+
+            if (task == null)
+            {
+                TempData["Error"] = "La tarea no existe.";
+                return RedirectToAction("Index");
+            }
+
+            return View(task);
+        }
     }
 }
