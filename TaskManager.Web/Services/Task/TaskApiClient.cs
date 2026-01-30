@@ -15,7 +15,7 @@ namespace TaskManager.Web.Services
             _httpClient.BaseAddress = new Uri(baseUrl);
         }
 
-        public async Task<PagedResultViewModel<TaskViewModel>> GetTasksAsync(int page = 1, int pageSize = 10)
+        public async Task<PagedResultViewModel<TaskViewModel>> GetTasksAsync(int page = 1, int pageSize = 5)
         {
             var url = $"/api/tasks/advanced-search?page={page}&pageSize={pageSize}";
 
@@ -62,6 +62,7 @@ namespace TaskManager.Web.Services
             response.EnsureSuccessStatusCode(); //Lanza Exception si no es exitosa
             return true;
         }
+        //270126
         //GET
         public async Task<EditTaskViewModel> GetTaskByIdAsync(int id)
         {
@@ -76,7 +77,7 @@ namespace TaskManager.Web.Services
                 IsCompleted = response.IsCompleted
             };
         }
-
+        //270126
         //POST
         public async Task UpdateTaskAsync(EditTaskViewModel model)
         {
@@ -91,6 +92,19 @@ namespace TaskManager.Web.Services
                 var error = await response.Content.ReadAsStringAsync();
                 throw new Exception(error);
             }
+        }
+        // Sesión 280126 Si la tarea esta en IsCompleted=true se puede borrar?
+        public async Task<bool> DeleteTaskAsync(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"/api/tasks/{id}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                throw new Exception(error);
+            }
+
+            return true;
         }
 
     }

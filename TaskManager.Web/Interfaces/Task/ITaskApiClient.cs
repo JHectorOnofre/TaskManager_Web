@@ -10,6 +10,8 @@ namespace TaskManager.Web.Services
         Task <bool> CreateTaskAsync(CreateTaskViewModel model);
         Task<EditTaskViewModel> GetTaskByIdAsync(int id);
         Task UpdateTaskAsync(EditTaskViewModel model);
+
+        Task<bool> DeleteTaskAsync(int id); //280126    
     }
 
 }
