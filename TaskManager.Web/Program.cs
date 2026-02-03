@@ -3,8 +3,8 @@ using TaskManager.Web.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
-builder.Services.AddApiClients();
+builder.Services.AddControllersWithViews(); // registra en contendedor DI todo lo necesario para que funcionen los controladores y vistas MVC 
+builder.Services.AddApiClients(); // Doc "guía particular" día1
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -21,7 +21,9 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-//Esa línea define la ruta “clásica” (MVC) que ASP.NET Core usa para decidir qué controlador y qué acción ejecutar cuando llega una petición HTTP. Si llega una URL y no coincide con nada más específico,intenta interpretarla como:Controlador / Acción / Id opcional.
+/*Esa línea define la ruta “clásica” (MVC) que ASP.NET Core usa para decidir qué controlador y qué acción 
+ * ejecutar cuando llega una petición HTTP. Si llega una URL y no coincide con nada más específico,intenta 
+ * interpretarla como:Controlador / Acción / Id opcional. */
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Tasks}/{action=Index}/{id?}");

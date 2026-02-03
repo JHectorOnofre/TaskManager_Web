@@ -1,5 +1,12 @@
 ﻿namespace TaskManager.Web.Models
 {
+
+    /*Los Modelos NO son la BD, NO son entidades, sino la forma en que 
+     MVC entiende una respuesta de la API
+    
+     - Los Modelos se crean para deserializar el JSON (lo que devuelve la API), 
+        si se quiere usar ese JSON en la API lo convertimos en un objeto (deserializar)
+     */
     public class TaskViewModel
     {
         public int Id { get; set; }

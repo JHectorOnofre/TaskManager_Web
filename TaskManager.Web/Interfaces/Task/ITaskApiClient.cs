@@ -2,6 +2,7 @@
 
 namespace TaskManager.Web.Services
 {
+    // INTERFAZ = contrato (igual que en la API)
     public interface ITaskApiClient
     {
         Task<PagedResultViewModel<TaskViewModel>> GetTasksAsync(int page = 1, int pageSize = 10); //cambia la vista

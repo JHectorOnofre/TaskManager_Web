@@ -16,5 +16,16 @@
         public PagedResultViewModel<TaskViewModel>? Result { get; set; }
     }
 }
-/* A diferencia del DTO en un ViewModel es común tener mezclados los parámetros
- de entrada y su respuesta (L16) */
+/* De los ViewModel:
+ * 
+ * DTO = Mensajero
+ * ViewModel = modelo de vista (para representar los datos como lo necesite la UI
+ * 
+ - A diferencia del DTO en un ViewModel es común tener mezclados los parámetros
+    de entrada y su respuesta (L16)
+ 
+ - Los ViewModel viven en la solución Frontend
+
+ - DTO != ViewModel: Se trata de capas separadas, por ende NO comparten tipos
+ 
+ */

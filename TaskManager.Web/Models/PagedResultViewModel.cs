@@ -1,5 +1,6 @@
 ﻿namespace TaskManager.Web.Models
 {
+    
     public class PagedResultViewModel<T>
     {
         public int Page { get; set; }

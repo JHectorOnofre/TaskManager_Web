@@ -37,7 +37,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var t in Model.Items)
+            @foreach (var t in Model.Items) // foreach para recorrer lo proveniente de la api
             {
                 <tr>
                     <td>@t.Id</td>
@@ -45,17 +45,17 @@
                     <td>@t.CategoryName</td>
                     <td>@(t.IsCompleted ? "Sí" : "No")</td>
                     <td>@t.Step</td>
-                    <td> <!--28ene-->
+                    <td> 
                         <a asp-controller="Tasks" asp-action="Details" asp-route-id="@t.Id" class="btn btn-sm btn-primary">
-                            Ver detalles
-                        </a>
-                        <a asp-action="Edit" asp-route-id="@t.Id" class="btn btn-sm btn-primary">Editar</a>
+                            Ver detalles </a> <!-- 30ene: Etiqueta <a> dado el método GET -->
+
+                        <a asp-action="Edit" asp-route-id="@t.Id" class="btn btn-sm btn-primary">Editar</a> <!--28ene-->
                         <form asp-action="Delete" method="post" class="d-inline">
                             <input type="hidden" name="id" value="@t.Id" />
                             <button type="submit" class="btn btn-danger btn-sm"
                                     onclick="return confirm('¿Estás seguro de que deseas eliminar esta tarea?');">
                                 Eliminar
-                            </button>
+                            </button> 
                         </form>
                     </td>
                 </tr>
