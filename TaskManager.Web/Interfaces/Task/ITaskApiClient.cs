@@ -17,5 +17,7 @@ namespace TaskManager.Web.Services
         Task<bool> DeleteTaskAsync(int id);//28 ene
 
         Task<TaskViewModel> GetTaskDetailAsync (int id);//30
+
+        Task<PagedResultViewModel<TaskViewModel>> AdvancedSearchAsync(TaskSearchViewModel filters); //4feb
     }
 }

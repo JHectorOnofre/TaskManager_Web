@@ -111,5 +111,14 @@ namespace TaskManager.Web.Controllers
 
             return View(task);
         }
+
+
+        [HttpGet] // 4feb
+        public async Task<IActionResult> Index2(TaskSearchViewModel filters)
+        {
+            var result = await _client.AdvancedSearchAsync(filters);
+            filters.Result = result;
+            return View(filters); // regresamos siempre el modelo completo
+        }
     }
 }
