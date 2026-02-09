@@ -120,5 +120,12 @@ namespace TaskManager.Web.Controllers
             filters.Result = result;
             return View(filters); // regresamos siempre el modelo completo
         }
+
+
+        [HttpGet]
+        public IActionResult AjaxDemo()
+        {
+            return View();
+        }
     }
 }

@@ -130,9 +130,9 @@ namespace TaskManager.Web.Services
             query["page"] = filters.Page.ToString();
             query["pageSize"] = filters.PageSize.ToString();
 
-            // Construir una URL con QueryString dinámico
+            
             var queryString = string.Join("&",
-                query.Select(kvp => $"{kvp.Key}={Uri.EscapeDataString(kvp.Value)}"));
+                query.Select(kvp => $"{kvp.Key}={Uri.EscapeDataString(kvp.Value)}")); // Construir una URL con QueryString dinámico
 
             var url = $"/api/tasks/advanced-search?{queryString}";
 
