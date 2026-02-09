@@ -12,6 +12,11 @@ namespace TaskManager.Web.Services
         Task UpdateTaskAsync(EditTaskViewModel model);
 
         Task<bool> DeleteTaskAsync(int id); //280126    
+
+        Task<TaskViewModel> GetTaskDetailAsync(int id); //300126
+
+        Task<string> ImportTasksFromExcelAsync(IFormFile file);
+      
     }
 
 }
