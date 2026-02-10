@@ -182,16 +182,16 @@ namespace TaskManager.Web.Controllers
         //060326 FIN Import Excel tareas
 
 
-        /*
+        
         // 040226
         [HttpGet]
-        public async Task<IActionResult> Index(TaskSearchViewModel filters)
+        public async Task<IActionResult> Index2(TaskSearchViewModel filters)
         {
             var result = await _client.AdvancedSearchAsync(filters);
             filters.Result = result;
             return View(filters); // regresamos siempre el modelo completo
         }
-        */
+        
 
 
         //050226 Ajax

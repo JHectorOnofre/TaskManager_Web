@@ -178,7 +178,7 @@ namespace TaskManager.Web.Services
 
 
 
-        /*
+
         //040626
         public async Task<PagedResultViewModel<TaskViewModel>> AdvancedSearchAsync(TaskSearchViewModel filters)
         {
@@ -217,6 +217,6 @@ namespace TaskManager.Web.Services
                        TotalCount = 0
                    };
         }
-        */
+
     }
 }

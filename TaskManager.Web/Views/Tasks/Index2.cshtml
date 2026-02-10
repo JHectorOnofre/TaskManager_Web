@@ -1,6 +1,49 @@
 ﻿@model TaskManager.Web.Models.TaskSearchViewModel
 @using TaskManager.Web.Models
 
+<h1>Listado de Tareas</h1>
+
+<partial name="_AlertMessages" />
+
+<form method="get" class="row g-3 mb-4">
+
+    <div class="col-md-3">
+        <label class="form-label">Texto</label>
+        <input asp-for="Text" class="form-control" />
+    </div>
+
+    <div class="col-md-3">
+        <label class="form-label">Categoría (Id)</label>
+        <input asp-for="CategoryId" class="form-control" type="number" />
+    </div>
+
+    <div class="col-md-3">
+        <label class="form-label">Nombre de Categoría</label>
+        <input asp-for="CategoryName" class="form-control" />
+    </div>
+
+    <div class="col-md-2">
+        <label class="form-label">Step</label>
+        <input asp-for="Step" class="form-control" type="number" />
+    </div>
+
+    <div class="col-md-2">
+        <label class="form-label">Estado</label>
+        <select asp-for="IsCompleted" class="form-select">
+            <option value="">-- todos --</option>
+            <option value="true">Completadas</option>
+            <option value="false">Pendientes</option>
+        </select>
+    </div>
+
+    <div class="col-md-12 mt-3">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+        <a asp-action="Index2" class="btn btn-secondary">Limpiar</a>
+    </div>
+
+</form>
+
+
 
 @if (Model.Result != null && Model.Result.Items.Any())
 {
@@ -66,46 +109,4 @@ else
         </ul>
     </nav>
 }
-
-<h1>Listado de Tareas</h1>
-
-<partial name="_AlertMessages" />
-
-<form method="get" class="row g-3 mb-4">
-
-    <div class="col-md-3">
-        <label class="form-label">Texto</label>
-        <input asp-for="Text" class="form-control" />
-    </div>
-
-    <div class="col-md-3">
-        <label class="form-label">Categoría (Id)</label>
-        <input asp-for="CategoryId" class="form-control" type="number" />
-    </div>
-
-    <div class="col-md-3">
-        <label class="form-label">Nombre de Categoría</label>
-        <input asp-for="CategoryName" class="form-control" />
-    </div>
-
-    <div class="col-md-2">
-        <label class="form-label">Step</label>
-        <input asp-for="Step" class="form-control" type="number" />
-    </div>
-
-    <div class="col-md-2">
-        <label class="form-label">Estado</label>
-        <select asp-for="IsCompleted" class="form-select">
-            <option value="">-- todos --</option>
-            <option value="true">Completadas</option>
-            <option value="false">Pendientes</option>
-        </select>
-    </div>
-
-    <div class="col-md-12 mt-3">
-        <button type="submit" class="btn btn-primary">Buscar</button>
-        <a asp-action="Index2" class="btn btn-secondary">Limpiar</a>
-    </div>
-
-</form>
 
