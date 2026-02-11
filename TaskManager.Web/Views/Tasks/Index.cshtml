@@ -1,5 +1,113 @@
-﻿@model TaskManager.Web.Models.PagedResultViewModel<TaskManager.Web.Models.TaskViewModel>
+﻿@model TaskManager.Web.Models.TaskSearchViewModel
+@{
+    ViewData["Title"] = "Tareas";
+}
 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container mt-4">
+    <partial name="_AlertMessages" />
+
+    <div class="mb-3">
+        <h1>Gestión de Tareas</h1>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body bg-light">
+            <form method="get" asp-action="Index" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label fw-bold small">Texto</label>
+                    <input asp-for="Text" class="form-control form-control-sm" placeholder="Título..." />
+                </div>
+
+                <div class="col-md-1">
+                    <label class="form-label fw-bold small">Categoria (Id)</label>
+                    <input asp-for="CategoryId" class="form-control form-control-sm" type="number" />
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label fw-bold small">Categoría</label>
+                    <input asp-for="CategoryName" class="form-control form-control-sm" />
+                </div>
+
+                <div class="col-md-1">
+                    <label class="form-label fw-bold small">Step</label>
+                    <input asp-for="Step" class="form-control form-control-sm" type="number" />
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label fw-bold small">Estado</label>
+                    <select asp-for="IsCompleted" class="form-select form-select-sm">
+                        <option value="">-- Todos --</option>
+                        <option value="true">Completadas</option>
+                        <option value="false">Pendientes</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 d-flex align-items-end gap-1">
+                    <button type="submit" class="btn btn-primary btn-sm flex-fill">Buscar</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-sm flex-fill">Limpiar</a>
+                    <a asp-action="Create" class="btn btn-success btn-sm flex-fill">+ Agregar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model.Result != null && Model.Result.Items.Any())
+    {
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <p class="text-muted small mb-0">Mostrando @Model.Result.Items.Count() de @Model.Result.TotalCount tareas.</p>
+        </div>
+
+        <div class="table-responsive shadow-sm">
+            <table class="table table-striped table-bordered table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Id</th>
+                        <th>Título</th>
+                        <th>Categoría</th>
+                        <th>Estado</th>
+                        <th>Step</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var t in Model.Result.Items)
+                    {
+                        <tr>
+                            <td>@t.Id</td>
+                            <td class="fw-bold">@t.Title</td>
+                            <td><span class="badge bg-info text-dark">@t.CategoryName</span></td>
+                            <td>@(t.IsCompleted ? " Sí" : " No")</td>
+                            <td>@t.Step</td>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <a asp-action="Details" asp-route-id="@t.Id" class="btn btn-sm btn-outline-primary">Ver</a>
+                                    <a asp-action="Edit" asp-route-id="@t.Id" class="btn btn-sm btn-outline-primary">Editar</a>
+                                    <form asp-action="Delete" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@t.Id" />
+                                        <button type="submit" class="btn btn-outline-danger btn-sm"
+                                                onclick="return confirm('¿Seguro que deseas eliminar esta tarea?');">
+                                            Borrar
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">No se encontraron resultados.</div>
+    }
+</div>
+
+@* @model TaskManager.Web.Models.PagedResultViewModel<TaskManager.Web.Models.TaskViewModel> *@
+
+@* @model TaskManager.Web.Models.TaskSearchViewModel
 @{
     ViewData["Title"] = "Tareas";
 }
@@ -15,7 +123,7 @@
         <a asp-action="Create" class="btn btn-sm btn-primary">Agregar</a>
     </h1>
 
-    <p>Mostrando @Model.Items.Count() de @Model.TotalCount</p>
+    <p>Mostrando @Model.Result.Items.Count() de @Model.Result.TotalCount</p> <!--Se modifica línea para que apunten a la propiedad Result que contiene a Items y TotalCount-->
 
     <!--Se añaden clases a las tablas-->
     <table class="table table-striped table-bordered table-hover">
@@ -30,7 +138,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var t in Model.Items) // foreach para recorrer lo proveniente de la api
+            @foreach (var t in Model.Result.Items) // foreach para recorrer lo proveniente de la api (también se integra Result)
             {
                 <tr>
                     <td>@t.Id</td>
@@ -56,4 +164,4 @@
         </tbody>
     </table>
 
-</div>
+</div> *@

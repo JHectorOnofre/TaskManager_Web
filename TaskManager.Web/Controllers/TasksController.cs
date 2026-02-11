@@ -13,26 +13,38 @@ namespace TaskManager.Web.Controllers
             _client = client;
         }
 
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 10) // https:// localhost:7137/
+        //public async Task<IActionResult> Index(int page = 1, int pageSize = 10) // https:// localhost:7137/
+        //{
+        //    var result = await _client.GetTasksAsync(page, pageSize);
+        //    return View(result);
+        //}
+        // - - Se sustituye por la unificación de Index + Index2 (asignación feb 04):
+        public async Task<IActionResult> Index(TaskSearchViewModel model)
         {
-            var result = await _client.GetTasksAsync(page, pageSize);
-            return View(result);
+            // 1. Configuramos valores por defecto si vienen vacíos
+            if (model.Page <= 0) model.Page = 1;
+            model.PageSize = 5; // se mantiene el estándar de 5 resultados por página
+
+            // 2. El cliente para traer los datos filtrados
+            model.Result = await _client.AdvancedSearchAsync(model); // Aquí usamos "AdvancedSearchAsync" que es el que ya tienes funcionando en Index2
+
+            // 3. Retorna la vista (Index principal) con el modelo completo
+            return View(model);
         }
 
+        //public async Task<IActionResult> Search(TaskSearchViewModel model)
+        //{
+        //    // Si es la primera carga de la página
+        //    if (model.Page == 0) // antes ==
+        //        model.Page = 1;
 
-        public async Task<IActionResult> Search(TaskSearchViewModel model)
-        {
-            // Si es la primera carga de la página
-            if (model.Page == 0) // antes ==
-                model.Page = 1;
+        //    model.PageSize = 5; // modificar búsqueda a 5 resultados
 
-            model.PageSize = 5; // modificar búsqueda a 5 resultados
+        //    model.Result = await _client.SearchTasksAsync(model); // se envía el modelo a la API
 
-            model.Result = await _client.SearchTasksAsync(model); // se envía el modelo a la API
-
-            return View("Index1", model);
-        }
-
+        //    return View("Index1", model);
+        //} - - LÓGICA QUE ANTES REDIRECCIONABA A INDEX1, AHORA INDEX PUEDE FILGRAR
+        
 
         [HttpGet]
         public IActionResult Create()
@@ -113,13 +125,13 @@ namespace TaskManager.Web.Controllers
         }
 
 
-        [HttpGet] // 4feb
-        public async Task<IActionResult> Index2(TaskSearchViewModel filters)
-        {
-            var result = await _client.AdvancedSearchAsync(filters);
-            filters.Result = result;
-            return View(filters); // regresamos siempre el modelo completo
-        }
+        //[HttpGet] // 4feb
+        //public async Task<IActionResult> Index2(TaskSearchViewModel filters)
+        //{
+        //    var result = await _client.AdvancedSearchAsync(filters);
+        //    filters.Result = result;
+        //    return View(filters); // regresamos siempre el modelo completo
+        //} - - Sustituido para unificar con Index
 
 
         [HttpGet]
