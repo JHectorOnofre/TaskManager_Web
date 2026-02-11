@@ -40,9 +40,24 @@ namespace TaskManager.Web.Controllers
             return View();
         }
 
+
         public IActionResult Index() // para hacer un index de categorías
         {
             return View(); // Queda pendiente para otra clase
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> ImportCatalogo(IFormFile file)
+        {
+            // ... validación de archivo ...
+
+            // Llamamos al ÚNICO método del API Client que existe
+            var result = await _categoryApiClient.ImportFromExcelAsync(file.OpenReadStream(), file.FileName);
+
+            TempData["Success"] = result.Message;
+            return View();
         }
     }
 }
