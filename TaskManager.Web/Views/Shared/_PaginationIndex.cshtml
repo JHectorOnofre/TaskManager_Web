@@ -1,0 +1,77 @@
+﻿@model TaskManager.Web.Models.TaskSearchViewModel
+
+@{
+    // Cálculo de total de páginas
+    var totalPages = (int)Math.Ceiling((double)Model.Result.TotalCount / Model.PageSize);
+    var currentPage = Model.Page;
+
+    // Rango de páginas a mostrar (actual +/- 2)
+    var startPage = Math.Max(1, currentPage - 2);
+    var endPage = Math.Min(totalPages, currentPage + 2);
+}
+
+@if (totalPages > 1)
+{
+    <nav aria-label="Navegación de tareas" class="mt-4">
+        <ul class="pagination justify-content-center shadow-sm">
+
+            @* Botón Anterior *@
+            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                <a class="page-link" asp-action="Index"
+                   asp-route-Page="@(currentPage - 1)"
+                   asp-route-Text="@Model.Text"
+                   asp-route-CategoryId="@Model.CategoryId"
+                   asp-route-CategoryName="@Model.CategoryName"
+                   asp-route-IsCompleted="@Model.IsCompleted"
+                   asp-route-Step="@Model.Step">
+                    &laquo;
+                </a>
+            </li>
+
+            @* Salto a la Primera Página si estamos lejos *@
+            @if (startPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index" asp-route-Page="1" asp-route-Text="@Model.Text" asp-route-CategoryId="@Model.CategoryId" asp-route-CategoryName="@Model.CategoryName" asp-route-IsCompleted="@Model.IsCompleted" asp-route-Step="@Model.Step">1</a>
+                </li>
+                @if (startPage > 2)
+                {
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                }
+            }
+
+            @* Bloque Central de Páginas *@
+            @for (int i = startPage; i <= endPage; i++)
+            {
+                <li class="page-item @(i == currentPage ? "active" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-Page="@i" asp-route-Text="@Model.Text" asp-route-CategoryId="@Model.CategoryId" asp-route-CategoryName="@Model.CategoryName" asp-route-IsCompleted="@Model.IsCompleted" asp-route-Step="@Model.Step">@i</a>
+                </li>
+            }
+
+            @* Salto a la Última Página *@
+            @if (endPage < totalPages)
+            {
+                @if (endPage < totalPages - 1)
+                {
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                }
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index" asp-route-Page="@totalPages" asp-route-Text="@Model.Text" asp-route-CategoryId="@Model.CategoryId" asp-route-CategoryName="@Model.CategoryName" asp-route-IsCompleted="@Model.IsCompleted" asp-route-Step="@Model.Step">@totalPages</a>
+                </li>
+            }
+
+            @* Botón Siguiente *@
+            <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                <a class="page-link" asp-action="Index"
+                   asp-route-Page="@(currentPage + 1)"
+                   asp-route-Text="@Model.Text"
+                   asp-route-CategoryId="@Model.CategoryId"
+                   asp-route-CategoryName="@Model.CategoryName"
+                   asp-route-IsCompleted="@Model.IsCompleted"
+                   asp-route-Step="@Model.Step">
+                    &raquo;
+                </a>
+            </li>
+        </ul>
+    </nav>
+}
