@@ -58,5 +58,42 @@ namespace TaskManager.Web.Services
                         ? $" ({result.Duplicadas} filas duplicadas no se importaron.)"
                         : string.Empty);
         }
+
+        // 2: Se modifica el servicio con la URL que apunte a lo que se hizo en la API (a la UrL)
+        //public async task<importcategoriesresult> importcatalogoasync(stream filestream, string filename)
+        //{
+        //    using var content = new multipartformdatacontent();
+        //    var streamcontent = new streamcontent(filestream);
+        //    content.add(streamcontent, "file", filename);
+
+        //    var response = await _httpclient.postasync("api/categories/import-excel", content); //url que iene del endpoint de la api
+
+        //    if (!response.issuccessstatuscode)
+        //    {
+        //        var error = await response.content.readasstringasync();
+        //        throw new exception(error);
+        //    }
+
+        //    return await response.content.readfromjsonasync<importcategoriesresult>();
+        //}
+        public async Task<ImportCategoriesResult> ImportFromExcelAsync(Stream fileStream, string fileName)
+        {
+            using var content = new MultipartFormDataContent();
+            var streamContent = new StreamContent(fileStream);
+
+            // "file" coincide con el parámetro IFormFile file del controlador API
+            content.Add(streamContent, "file", fileName);
+
+            // La URL que confirmamos en tu CategoriesController de la API
+            var response = await _httpClient.PostAsync("api/categories/import-excel", content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                throw new Exception(error);
+            }
+
+            return await response.Content.ReadFromJsonAsync<ImportCategoriesResult>();
+        }
     }
 }
