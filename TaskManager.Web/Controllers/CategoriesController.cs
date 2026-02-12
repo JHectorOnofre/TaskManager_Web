@@ -1,15 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TaskManager.Web.Services;
+using TaskManager.Web.Services.Business; // Importante añadir esta referencia
 
 namespace TaskManager.Web.Controllers
 {
     public class CategoriesController : Controller
     {
-        private readonly ICategoryApiClient _categoryApiClient;
+        // Ahora inyectamos el SERVICIO en lugar del CLIENTE
+        private readonly ICategoryService _categoryService;
 
-        public CategoriesController(ICategoryApiClient categoryApiClient)
+        public CategoriesController(ICategoryService categoryService)
         {
-            _categoryApiClient = categoryApiClient;
+            _categoryService = categoryService;
         }
 
         [HttpGet]
@@ -21,19 +22,20 @@ namespace TaskManager.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Import(IFormFile file)
         {
-            if (file == null || file.Length == 0)
-            {
-                TempData["Error"] = "Debe seleccionar un archivo Excel.";
-                return View();
-            }
-
             try
             {
-                var resultMessage = await _categoryApiClient.ImportCategoriesFromExcelAsync(file);
+                // El controlador solo delega la tarea al servicio
+                var resultMessage = await _categoryService.ImportFromExcelAsync(file);
                 TempData["Success"] = resultMessage;
+            }
+            catch (ArgumentException ex)
+            {
+                // Errores de validación conocidos
+                TempData["Error"] = ex.Message;
             }
             catch (Exception ex)
             {
+                // Errores inesperados de la API
                 TempData["Error"] = "Ocurrió un error al importar el archivo: " + ex.Message;
             }
 
