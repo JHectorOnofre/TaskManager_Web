@@ -1,6 +1,6 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
+﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
+using System.Net;
 using TaskManager.Web.Utilities.Exceptions;
 
 namespace TaskManager.Web.Middleware
@@ -16,14 +16,14 @@ namespace TaskManager.Web.Middleware
         public MvcGlobalErrorHandlerMiddleware(
             RequestDelegate next,
             ILogger<MvcGlobalErrorHandlerMiddleware> logger,
-            ITempDataDictionaryFactory tempDataFactory//,
-          //  ITempDataProvider tempDataProvider
+            ITempDataDictionaryFactory tempDataFactory,
+            ITempDataProvider tempDataProvider
 )
         {
             _next = next;
             _logger = logger;
             _tempDataFactory = tempDataFactory;
-           // _tempDataProvider = tempDataProvider;
+            _tempDataProvider = tempDataProvider;
 
         }
 
@@ -40,16 +40,26 @@ namespace TaskManager.Web.Middleware
 
                 var TempData = _tempDataFactory.GetTempData(context);
                 TempData["Error"] = ex.Message;
-		// CLAVE: Guardar TempData manualmente (cookie o sesión)
-              //  _tempDataProvider.SaveTempData(context, TempData);
+                // CLAVE: Guardar TempData manualmente (cookie o sesión)
+                _tempDataProvider.SaveTempData(context, TempData);
 
+                var endpoint = context.GetEndpoint();
+                var routeValues = context.Request.RouteValues;
 
-                // Redirigimos a una página amigable (por ejemplo, el listado)
-                if (!context.Response.HasStarted)
+                var controller = routeValues["controller"]?.ToString();
+                var action = routeValues["action"]?.ToString();
+
+                if (!(controller == "Tasks" && action == "Index"))
                 {
-                    context.Response.Clear();
-                    context.Response.Redirect("/Tasks/Index");
+                    // Redirigimos a una página amigable (por ejemplo, el listado)
+                    if (!context.Response.HasStarted)
+                    {
+                        context.Response.Clear();
+                        context.Response.Redirect("/Tasks/Index");
+                    }
                 }
+
+
 
             }
             catch (Exception ex)
@@ -59,16 +69,23 @@ namespace TaskManager.Web.Middleware
 
                 var TempData = _tempDataFactory.GetTempData(context);
                 TempData["Error"] = "Ocurrió un error inesperado. Intente de nuevo más tarde.";
-		// Guardar TempData manualmente
-               // _tempDataProvider.SaveTempData(context, TempData);
+                // Guardar TempData manualmente
+                _tempDataProvider.SaveTempData(context, TempData);
+                var endpoint = context.GetEndpoint();
+                var routeValues = context.Request.RouteValues;
 
-                // Aquí puedes redirigir a una vista de error genérica
-                if (!context.Response.HasStarted)
+                var controller = routeValues["controller"]?.ToString();
+                var action = routeValues["action"]?.ToString();
+                if (!(controller == "Tasks" && action == "Index"))
                 {
-                    context.Response.Clear();
-                    context.Response.Redirect("/Tasks/Index");
-                }
+                    // Aquí puedes redirigir a una vista de error genérica
+                    if (!context.Response.HasStarted)
+                    {
+                        context.Response.Clear();
+                        context.Response.Redirect("/Tasks/Index");
+                    }
 
+                }
             }
         }
     }

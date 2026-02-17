@@ -1,4 +1,5 @@
-﻿using TaskManager.Web.Services;
+﻿using TaskManager.Web.Http;
+using TaskManager.Web.Services;
 using TaskManager.Web.Services.Business;
 
 namespace TaskManager.Web.Extensions
@@ -8,8 +9,16 @@ namespace TaskManager.Web.Extensions
         public static IServiceCollection AddApiClients(this IServiceCollection services)
         {
             // 1. Clientes de API (Capa de Infraestructura)
-            services.AddHttpClient<ITaskApiClient, TaskApiClient>();
-            services.AddHttpClient<ICategoryApiClient, CategoryApiClient>();
+            //170226 ciomenta  services.AddHttpClient<ITaskApiClient, TaskApiClient>();
+            // services.AddHttpClient<ICategoryApiClient, CategoryApiClient>();
+
+            services.AddTransient<ApiExceptionHandler>();
+
+            services.AddHttpClient<ITaskApiClient, TaskApiClient>()
+                    .AddHttpMessageHandler<ApiExceptionHandler>();
+
+            services.AddHttpClient<ICategoryApiClient, CategoryApiClient>()
+                    .AddHttpMessageHandler<ApiExceptionHandler>();
             // 2. Servicios de Negocio (Service Layer)
             // Se usa AddScoped para que el servicio viva lo que dura la petición HTTP
             services.AddScoped<ITaskService, TaskService>(); //IMplementacióin de Service Layer
