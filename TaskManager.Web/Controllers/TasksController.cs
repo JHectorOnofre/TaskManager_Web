@@ -56,7 +56,7 @@ namespace TaskManager.Web.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
-        {
+        {//Borramo try catch por modificaciones en el MIddleware, permitiendo capturar excepciones 130226
             try
             {
                 await _taskService.DeleteTaskAsync(id);
