@@ -140,6 +140,22 @@ namespace TaskManager.Web.Controllers
             // pasamos la lista de items que está dentro de .Result
             return PartialView("_TaskTablePartial", resultModel.Result?.Items);
         }
+        //180226
+        [HttpGet]
+        public IActionResult CreatePartial()
+        {
+            return PartialView("_TaskFormPartial2", new CreateTaskViewModel());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditPartial(int id)
+        {
+            var task = await _taskService.GetByIdAsync(id);
+
+
+
+            return PartialView("_TaskFormPartial2", task);
+        }
 
     }
 }

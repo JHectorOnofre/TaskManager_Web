@@ -218,5 +218,21 @@ namespace TaskManager.Web.Services
                    };
         }
 
+
+        public async Task<EditTaskViewModel> GetTaskById2Async(int id)
+        {
+            var response = await _httpClient.GetFromJsonAsync<TaskViewModel>($"/api/tasks/{id}");
+
+            if (response == null) throw new Exception("No se encontró la tarea");
+
+            return new EditTaskViewModel
+            {
+                Id = response.Id,
+                Title = response.Title,
+                CategoryId = response.CategoryId,
+                Step = response.Step,
+                IsCompleted = response.IsCompleted
+            };
+        }
     }
 }
