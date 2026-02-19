@@ -21,7 +21,7 @@
         });
 
         // Construimos la URL para el GET parcial
-        url = '/Tasks/LoadTablePartial?' + query.toString();
+        url = "/Tasks/LoadTablePartial?" + query.toString();
 
     // Llamada AJAX
     const response = await fetch(url);

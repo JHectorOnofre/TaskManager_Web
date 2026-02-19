@@ -41,6 +41,13 @@ namespace TaskManager.Web.Services.Business
             return await _client.GetTaskByIdAsync(id.Value);
         }
 
+        public async Task<EditTaskViewModel> GetTaskByIdAsync(int id)
+        {
+            // SL le pide al ApiClient que busque la tarea
+            // _client es el campo inyectado en el constructor
+            return await _client.GetTaskByIdAsync(id);
+        }
+
         public async Task UpdateTaskAsync(EditTaskViewModel model)
         {
             await _client.UpdateTaskAsync(model);
@@ -75,5 +82,7 @@ namespace TaskManager.Web.Services.Business
             filters.Result = await _client.AdvancedSearchAsync(filters);
             return filters;
         }
+
+
     }
 }

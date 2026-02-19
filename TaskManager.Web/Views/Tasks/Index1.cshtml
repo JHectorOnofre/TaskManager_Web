@@ -45,16 +45,17 @@
 <div id="taskTableContainer">
     @await Html.PartialAsync("_TaskTablePartial", Model.Result?.Items)
 </div>
-
+<!--Declaración de modal-->
 <div class="modal fade" id="taskModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content" id="taskModalContent">
             <!-- Aquí se inyectará la partial / Modal de bootstrap oculto-->
+
         </div>
     </div>
 </div>
 
 @section Scripts {
-    <!--script src="~/js/Task/tasks-partial.js"></!--script>
-    <script src="~/js/Task/tasks-modal.js"></script>
+    <script src="~/js/Task/tasks-partial.js"></script>
+    <script src="~/js/Task/task-modal.js"></script>
 }

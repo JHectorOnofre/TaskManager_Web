@@ -150,7 +150,7 @@ namespace TaskManager.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> EditPartial(int id)
         {
-            var task = await _taskService.GetByIdAsync(id);
+            var task = await _taskService.GetTaskByIdAsync(id);  
 
 
 

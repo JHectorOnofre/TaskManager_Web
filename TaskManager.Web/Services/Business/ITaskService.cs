@@ -10,6 +10,9 @@ namespace TaskManager.Web.Services.Business
         Task<TaskSearchViewModel> SearchTasksAsync(TaskSearchViewModel model);
         Task<bool> CreateTaskAsync(CreateTaskViewModel model);
         Task<EditTaskViewModel> GetTaskForEditAsync(int? id);
+
+        // Dentro de ITaskService.cs 180826 por task-modal.js
+        Task<EditTaskViewModel> GetTaskByIdAsync(int id);
         Task UpdateTaskAsync(EditTaskViewModel model);
         Task<bool> DeleteTaskAsync(int id);
         Task<TaskViewModel> GetDetailsAsync(int? id);

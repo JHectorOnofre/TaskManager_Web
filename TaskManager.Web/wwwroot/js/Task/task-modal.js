@@ -45,7 +45,7 @@
             const isEdit = data.Id && data.Id !== "0";
 
             const url = isEdit
-                ? '/Tasks/Edit/'+ data.Id
+                ? '/Tasks/Edit/' + data.Id
                     : '/Tasks/Create';
 
             const response = await fetch(url, {
