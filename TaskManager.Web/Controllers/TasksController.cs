@@ -36,7 +36,7 @@ namespace TaskManager.Web.Controllers
             await _taskService.CreateTaskAsync(model);
             return RedirectToAction(nameof(Index));
         }
-
+        //Modificaciones para modal Editar 190226
         [HttpPost]
         // El [FromBody] es OBLIGATORIO si fetch envía application/json
         public async Task<IActionResult> Edit([FromBody] EditTaskViewModel model)
@@ -142,14 +142,15 @@ namespace TaskManager.Web.Controllers
             return PartialView("_TaskTablePartial", resultModel.Result?.Items);
         }
         //180226
+        //Para abrir el modal de CREAR TAREA
         [HttpGet]
         public IActionResult CreatePartial()
         {
             // El TRUCO: Pasamos un EditTaskViewModel con Id = 0 para que la vista no colapse al buscar el Model.Id
             return PartialView("_TaskFormPartial2", new EditTaskViewModel { Id = 0 });
         }
-
-        // 2. GET: Para abrir el modal de EDITAR
+        //190226
+        // Para abrir el modal de EDITAR
         [HttpGet]
         public async Task<IActionResult> EditPartial(int id)
         {

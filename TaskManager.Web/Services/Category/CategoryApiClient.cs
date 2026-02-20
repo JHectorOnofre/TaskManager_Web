@@ -34,7 +34,7 @@ namespace TaskManager.Web.Services
             // El "file" aquí debe coincidir con el nombre del parámetro en el endpoint de la API
             content.Add(fileContent, "file", file.FileName);
 
-            // Llamamos a la API
+            // Llamar a la API
             var response = await _httpClient.PostAsync("/api/categories/import-excel", content);
 
             if (!response.IsSuccessStatusCode)
@@ -53,7 +53,7 @@ namespace TaskManager.Web.Services
             }
 
             // Devolvemos el mensaje que vino de la API
-            // Ej: "Se importaron 5 categorías nuevas."
+            // Ej "Se importaron 5 categorías nuevas."
             return result.Message +
                    (result.Duplicadas > 0
                         ? $" ({result.Duplicadas} filas duplicadas no se importaron.)"

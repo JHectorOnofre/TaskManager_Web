@@ -11,9 +11,11 @@
     <form id="taskForm">
         <input type="hidden" name="Id" value="@Model.Id" />
 
+        <input type="hidden" name="IsCompleted" value="@(Model.IsCompleted ? "true" : "false")" />
+
         <input type="hidden" id="currentCategoryId" value="@Model.CategoryId" />
 
-        <div class="mb-3">
+<div class="mb-3">
             <label>Título</label>
             <input name="Title" value="@Model.Title" class="form-control" />
             <span class="text-danger" data-valmsg-for="Title"></span>

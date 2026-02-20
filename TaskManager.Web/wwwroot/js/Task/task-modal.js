@@ -3,7 +3,7 @@
     const modal = new bootstrap.Modal(document.getElementById("taskModal"));
     const modalContent = document.getElementById("taskModalContent");
 
-    // Nueva función para cargar categorías
+    // Nueva función para cargar categorías 190226
     async function fillCategoriesSelect(selectedId) {
         const select = document.getElementById("CategoryIdSelect");
         const response = await fetch("/Categories/GetCategoriesJson");
@@ -56,7 +56,15 @@
             const form = document.getElementById("taskForm");
             const formData = new FormData(form);
 
-            const data = Object.fromEntries(formData.entries());
+            const data =
+                {
+                Id: parseInt(formData.get("Id")) || 0,
+                Title: formData.get("Title"),
+                CategoryId: parseInt(formData.get("CategoryId")) || 0,
+                Step: parseInt(formData.get("Step")) || 0,
+                // Verifica si es true (uso futuro)?) o viene del input oculto
+                IsCompleted: formData.get("IsCompleted") === "true"
+                }
 
             const isEdit = data.Id && data.Id !== "0";
 
@@ -64,17 +72,19 @@
                 ? '/Tasks/Edit/' + data.Id
                     : '/Tasks/Create';
 
-            const response = await fetch(url, {
+            const response = await fetch(url,
+                {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data)
-            });
+                });
 
-            if (!response.ok) {
+            if (!response.ok)
+                {
                 const html = await response.text();
                 modalContent.innerHTML = html;
                 return;
-            }
+                }
 
             modal.hide();
 
