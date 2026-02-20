@@ -38,19 +38,20 @@ namespace TaskManager.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(EditTaskViewModel model)
+        // El [FromBody] es OBLIGATORIO si fetch envía application/json
+        public async Task<IActionResult> Edit([FromBody] EditTaskViewModel model)
         {
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState); // Para que el AJAX sepa que hubo un error
+
             try
             {
                 await _taskService.UpdateTaskAsync(model);
-                TempData["Success"] = "La tarea fue actualizada correctamente.";
-                return RedirectToAction(nameof(Index));
+                return Ok(); // Responde OK(200) para que el JavaScript cierre el modal y actualice la tabla
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Ocurrió un error: " + ex.Message);
-                return View(model);
+                return BadRequest("Ocurrió un error: " + ex.Message);
             }
         }
 
@@ -144,15 +145,16 @@ namespace TaskManager.Web.Controllers
         [HttpGet]
         public IActionResult CreatePartial()
         {
-            return PartialView("_TaskFormPartial2", new CreateTaskViewModel());
+            // El TRUCO: Pasamos un EditTaskViewModel con Id = 0 para que la vista no colapse al buscar el Model.Id
+            return PartialView("_TaskFormPartial2", new EditTaskViewModel { Id = 0 });
         }
 
+        // 2. GET: Para abrir el modal de EDITAR
         [HttpGet]
         public async Task<IActionResult> EditPartial(int id)
         {
-            var task = await _taskService.GetTaskByIdAsync(id);  
-
-
+            var task = await _taskService.GetTaskByIdAsync(id);
+            if (task == null) return NotFound();
 
             return PartialView("_TaskFormPartial2", task);
         }

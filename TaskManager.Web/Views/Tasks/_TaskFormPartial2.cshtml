@@ -1,4 +1,4 @@
-﻿@model dynamic
+﻿@model TaskManager.Web.Models.EditTaskViewModel
 
 <div class="modal-header">
     <h5 class="modal-title">
@@ -11,6 +11,8 @@
     <form id="taskForm">
         <input type="hidden" name="Id" value="@Model.Id" />
 
+        <input type="hidden" id="currentCategoryId" value="@Model.CategoryId" />
+
         <div class="mb-3">
             <label>Título</label>
             <input name="Title" value="@Model.Title" class="form-control" />
@@ -21,6 +23,13 @@
             <label>Step</label>
             <input name="Step" value="@Model.Step" type="number" class="form-control" />
             <span class="text-danger" data-valmsg-for="Step"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Categoría</label>
+            <select name="CategoryId" id="CategoryIdSelect" class="form-select">
+                <option value="">Cargando...</option>
+            </select>
         </div>
     </form>
 </div>

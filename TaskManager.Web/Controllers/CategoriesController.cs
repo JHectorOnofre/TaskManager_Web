@@ -46,5 +46,13 @@ namespace TaskManager.Web.Controllers
         {
             return View(); // Queda pendiente para otra clase
         }
+
+        [HttpGet]
+        public async Task<JsonResult> GetCategoriesJson()
+        {
+            // Supongamos que tu cliente de categorías tiene un método para listar
+            var categories = await _categoryService.GetCategoriesAsync();
+            return Json(categories);
+        }
     }
 }

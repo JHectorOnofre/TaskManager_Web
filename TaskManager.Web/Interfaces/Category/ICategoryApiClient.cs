@@ -5,5 +5,7 @@ namespace TaskManager.Web.Services
     public interface ICategoryApiClient
     {
         Task<string> ImportCategoriesFromExcelAsync(IFormFile file);
+
+        Task<IEnumerable<dynamic>> GetAllCategoriesAsync();
     }
 }

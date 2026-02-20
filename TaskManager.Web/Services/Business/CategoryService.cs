@@ -26,7 +26,7 @@ namespace TaskManager.Web.Services.Business
         public async Task<IEnumerable<object>> GetCategoriesAsync()
         {
             // Queda pendiente para otra clase
-            return new List<object>();
+            return await _categoryApiClient.GetAllCategoriesAsync();
         }
     }
 }

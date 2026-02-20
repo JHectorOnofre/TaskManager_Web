@@ -3,6 +3,19 @@
     const modal = new bootstrap.Modal(document.getElementById("taskModal"));
     const modalContent = document.getElementById("taskModalContent");
 
+    // Nueva función para cargar categorías
+    async function fillCategoriesSelect(selectedId) {
+        const select = document.getElementById("CategoryIdSelect");
+        const response = await fetch("/Categories/GetCategoriesJson");
+        const categories = await response.json();
+
+        select.innerHTML = '<option value="">-- Seleccione --</option>';
+        categories.forEach(cat => {
+            const isSelected = cat.id == selectedId ? "selected" : "";
+            select.innerHTML += `<option value="${cat.id}" ${isSelected}>${cat.name}</option>`;
+        });
+    }
+
     // CREAR
     document.getElementById("btnCrearTask")
         .addEventListener("click", async () => {
@@ -30,6 +43,9 @@
 
             modalContent.innerHTML = html;
             modal.show();
+
+            const categoryId = document.getElementById("currentCategoryId").value;
+            await fillCategoriesSelect(categoryId);
         }
     });
 
@@ -67,7 +83,7 @@
     });
 
 });
-
+// Función spinnerHtml
 function spinnerHtml() {
     return `
         <div class="modal-body text-center">
@@ -76,6 +92,7 @@ function spinnerHtml() {
         </div>`;
 }
 
+// Función refreshTable
 async function refreshTable() {
     const response = await fetch("/Tasks/LoadTablePartial");
     const html = await response.text();

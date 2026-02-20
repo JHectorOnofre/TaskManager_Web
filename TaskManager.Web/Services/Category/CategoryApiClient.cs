@@ -16,6 +16,7 @@ namespace TaskManager.Web.Services
             _httpClient = httpClient;
             var baseUrl = configuration["ApiSettings:BaseUrl"];
             _httpClient.BaseAddress = new Uri(baseUrl);
+
         }
 
         public async Task<string> ImportCategoriesFromExcelAsync(IFormFile file)
@@ -42,7 +43,7 @@ namespace TaskManager.Web.Services
                 throw new Exception($"Error al importar categorías. Respuesta API: {errorBody}");
             }
 
-            // Leemos el JSON que envía la API
+            // Leem el JSON que envía la API
             var result = await response.Content.ReadFromJsonAsync<ImportCategoriesResult>();
 
             // Si por alguna razón no se pudo deserializar
@@ -57,6 +58,13 @@ namespace TaskManager.Web.Services
                    (result.Duplicadas > 0
                         ? $" ({result.Duplicadas} filas duplicadas no se importaron.)"
                         : string.Empty);
+        }
+
+        public async Task<IEnumerable<dynamic>> GetAllCategoriesAsync()
+        {
+            // Llama al endpoint de tu API que devuelve las categorías
+            return await _httpClient.GetFromJsonAsync<IEnumerable<dynamic>>("/api/categories")
+                   ?? new List<dynamic>();
         }
     }
 }
