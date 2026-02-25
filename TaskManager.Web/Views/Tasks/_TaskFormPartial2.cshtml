@@ -1,4 +1,4 @@
-﻿@model TaskManager.Web.Models.EditTaskViewModel
+﻿@model TaskManager.Web.Models.TaskFormViewModel
 
 <div class="modal-header">
     <h5 class="modal-title">
@@ -11,27 +11,38 @@
     <form id="taskForm">
         <input type="hidden" name="Id" value="@Model.Id" />
 
-        <input type="hidden" name="IsCompleted" value="@(Model.IsCompleted ? "true" : "false")" />
-
-        <input type="hidden" id="currentCategoryId" value="@Model.CategoryId" />
-
-<div class="mb-3">
-            <label>Título</label>
+        <div class="mb-3">
+            <label class="form-label">Título</label>
             <input name="Title" value="@Model.Title" class="form-control" />
             <span class="text-danger" data-valmsg-for="Title"></span>
         </div>
 
         <div class="mb-3">
-            <label>Step</label>
+            <label class="form-label">Categoría</label>
+
+            <select id="categorySelect"
+                    name="CategoryId"
+                    class="form-select"
+                    data-selected-category-id="@Model.CategoryId">
+                <option value="">-- Seleccione una categoría --</option>
+                @* Las opciones reales se llenarán con fetch *@
+            </select>
+
+            <span class="text-danger" data-valmsg-for="CategoryId"></span>
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Step</label>
             <input name="Step" value="@Model.Step" type="number" class="form-control" />
             <span class="text-danger" data-valmsg-for="Step"></span>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Categoría</label>
-            <select name="CategoryId" id="CategoryIdSelect" class="form-select">
-                <option value="">Cargando...</option>
-            </select>
+        <div class="form-check mb-3">
+            <input class="form-check-input"
+                   type="checkbox"
+                   name="IsCompleted"
+                   @(Model.IsCompleted ? "checked" : "") />
+            <label class="form-check-label">Completada</label>
         </div>
     </form>
 </div>
