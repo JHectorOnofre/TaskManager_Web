@@ -54,5 +54,14 @@ namespace TaskManager.Web.Controllers
             var categories = await _categoryService.GetCategoriesAsync();
             return Json(categories);
         }
+
+        //250226
+        // GET: /Categories/Options
+        [HttpGet]
+        public async Task<IActionResult> Options()
+        {
+            var categories = await _categoryService.GetSimpleListAsync();
+            return Json(categories); // Devuelve JSON al JS del front
+        }
     }
 }

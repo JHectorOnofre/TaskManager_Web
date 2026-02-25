@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using TaskManager.Web.Models;
 
 namespace TaskManager.Web.Services
 {
@@ -7,5 +8,6 @@ namespace TaskManager.Web.Services
         Task<string> ImportCategoriesFromExcelAsync(IFormFile file);
 
         Task<IEnumerable<dynamic>> GetAllCategoriesAsync();
+        Task<List<CategoryOptionViewModel>> GetSimpleListAsync();
     }
 }

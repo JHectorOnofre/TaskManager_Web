@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using TaskManager.Web.Models;
 
 namespace TaskManager.Web.Services.Business
 {
@@ -9,5 +10,6 @@ namespace TaskManager.Web.Services.Business
 
         // Queda pendiente para implementar lógica de Index en el futuro
         Task<IEnumerable<object>> GetCategoriesAsync();
+        Task<List<CategoryOptionViewModel>> GetSimpleListAsync();
     }
 }

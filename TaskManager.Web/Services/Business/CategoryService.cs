@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using TaskManager.Web.Models;
+using TaskManager.Web.Utilities.Exceptions;
 
 namespace TaskManager.Web.Services.Business
 {
@@ -28,5 +30,35 @@ namespace TaskManager.Web.Services.Business
             // Queda pendiente para otra clase
             return await _categoryApiClient.GetAllCategoriesAsync();
         }
+
+        //250226
+        public async Task<List<CategoryOptionViewModel>> GetSimpleListAsync()
+        {
+            // Llamamos al endpoint de la API: /api/categories/simple-list
+            //var response = await _httpClient.GetAsync("/api/categories");
+            return await _categoryApiClient.GetSimpleListAsync();
+
+            /*
+             * if (!response.IsSuccessStatusCode)
+            {
+                var body = await response.Content.ReadAsStringAsync();
+                var message = string.IsNullOrWhiteSpace(body)
+                    ? $"Error al obtener categorías. Código: {(int)response.StatusCode}"
+                    : body;
+
+                throw new ApiException(message, (int)response.StatusCode);
+            }
+            
+
+            var categories =
+                await response.Content.ReadFromJsonAsync<List<CategoryOptionViewModel>>()
+                ?? new List<CategoryOptionViewModel>();
+            
+            return categories;
+             */
+        }
+
     }
+
+
 }

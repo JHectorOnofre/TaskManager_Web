@@ -123,7 +123,7 @@ async function loadCategoriesInModal(modalContent) {
     const selectedId = select.dataset.selectedCategoryId || "";
 
     try {
-        const response = await fetch("/api/categories/simple-list");
+        const response = await fetch("/Categories/Options");
 
         if (!response.ok) {
             console.error("Error al cargar categorías");

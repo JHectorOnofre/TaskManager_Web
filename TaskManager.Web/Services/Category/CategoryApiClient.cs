@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using TaskManager.Web.Models;
+using TaskManager.Web.Utilities.Exceptions;
 
 namespace TaskManager.Web.Services
 {
@@ -65,6 +66,29 @@ namespace TaskManager.Web.Services
             // Llama al endpoint de tu API que devuelve las categorías
             return await _httpClient.GetFromJsonAsync<IEnumerable<dynamic>>("/api/categories")
                    ?? new List<dynamic>();
+        }
+
+        //250226
+        public async Task<List<CategoryOptionViewModel>> GetSimpleListAsync()
+        {
+            // Llamamos al endpoint de la API: /api/categories/simple-list
+            var response = await _httpClient.GetAsync("/api/categories");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var body = await response.Content.ReadAsStringAsync();
+                var message = string.IsNullOrWhiteSpace(body)
+                    ? $"Error al obtener categorías. Código: {(int)response.StatusCode}"
+                    : body;
+
+                throw new ApiException(message, (int)response.StatusCode);
+            }
+
+            var categories =
+                await response.Content.ReadFromJsonAsync<List<CategoryOptionViewModel>>()
+                ?? new List<CategoryOptionViewModel>();
+
+            return categories;
         }
     }
 }
