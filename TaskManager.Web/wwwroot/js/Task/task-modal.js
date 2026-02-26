@@ -1,5 +1,6 @@
 ﻿document.addEventListener("DOMContentLoaded", () => {
 
+
     const modal = new bootstrap.Modal(document.getElementById("taskModal"));
     const modalContent = document.getElementById("taskModalContent");
     /*240226
@@ -95,6 +96,40 @@
             await refreshTable();
         }
     });
+    //ELIMINAR 260226 
+    document.addEventListener("click", async (e) => {
+        if (e.target.matches(".btnDelete")) {
+
+            const id = e.target.dataset.id;
+            if (!id) return;
+
+            const confirmado = confirm("¿Seguro que deseas eliminar esta tarea?");
+            if (!confirmado) return;
+
+            try {
+                const response = await fetch('/Tasks/DeleteAjax/' + id, {
+                    method: "POST"
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    showError(result.message || "No se pudo eliminar la tarea.");
+                    return;
+                }
+
+                showSuccess(result.message || "La tarea fue eliminada correctamente.");
+
+                await refreshTable();
+
+            } catch (err) {
+                console.error(err);
+                showError("Error de comunicación con el servidor al eliminar la tarea.");
+            }
+        }
+    });
+
+
 
 });
 // Función spinnerHtml
@@ -112,6 +147,7 @@ async function refreshTable() {
     const html = await response.text();
     document.getElementById("taskTableContainer").innerHTML = html;
 }
+
 //240226
 // Función para cargar las categorías en el select del modal 240226
 async function loadCategoriesInModal(modalContent) {
@@ -160,4 +196,27 @@ async function loadCategoriesInModal(modalContent) {
     } catch (err) {
         console.error("Error de red al cargar categorías", err);
     }
+}
+
+// ✅ Funciones auxiliares para mostrar mensajes 260226
+function showSuccess(message) {
+    const container = document.getElementById("alertContainer");
+    if (!container) return;
+
+    container.innerHTML = `
+       <div class="alert alert-success alert-dismissible fade show" role="alert">
+           ${message}
+           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+       </div>`;
+}
+
+function showError(message) {
+    const container = document.getElementById("alertContainer");
+    if (!container) return;
+
+    container.innerHTML = `
+       <div class="alert alert-danger alert-dismissible fade show" role="alert">
+           ${message}
+           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+       </div>`;
 }

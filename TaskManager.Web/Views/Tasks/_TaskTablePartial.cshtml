@@ -28,10 +28,10 @@
                             Editar
                         </button>
 
-                        <form asp-action="Delete" method="post" class="d-inline">
-                            <input type="hidden" name="id" value="@t.Id" />
-                            <button class="btn btn-sm btn-danger">Eliminar</button>
-                        </form>
+                        <button class="btn btn-sm btn-danger btnDelete"
+                                data-id="@t.Id">
+                            Eliminar
+                        </button>
                     </td>
                 </tr>
             }

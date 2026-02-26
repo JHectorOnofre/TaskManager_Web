@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TaskManager.Web.Models;
-using TaskManager.Web.Services.Business; // Referencia a la nueva capa
+using TaskManager.Web.Services.Business;
+using TaskManager.Web.Utilities.Exceptions; // Referencia a la nueva capa
 
 namespace TaskManager.Web.Controllers
 {
@@ -200,6 +201,21 @@ namespace TaskManager.Web.Controllers
             };
 
             return PartialView("_TaskFormPartial", model);
+        }
+        //260226
+        [HttpPost]
+        public async Task<IActionResult> DeleteAjax(int id)
+        {
+            
+                await _taskService.DeleteTaskAsync(id);
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "La tarea se eliminó correctamente."
+                });
+            
+            
         }
     }
 }
