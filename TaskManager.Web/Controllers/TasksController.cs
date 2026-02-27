@@ -84,7 +84,7 @@ namespace TaskManager.Web.Controllers
             }
             return View(task);
         }
-
+        //Edit con alert
         public async Task<IActionResult> Edit(int? id)
         {
             var task = await _taskService.GetTaskForEditAsync(id);
@@ -131,7 +131,7 @@ namespace TaskManager.Web.Controllers
         [HttpGet]
         public IActionResult AjaxDemo() => View();
 
-        //120226 Partial Views GAdaptsacion
+        //120226 Partial Views GAdaptacion
         [HttpGet]
         public async Task<IActionResult> LoadTablePartial(TaskSearchViewModel filters)
         {
@@ -148,7 +148,7 @@ namespace TaskManager.Web.Controllers
         [HttpGet]
         public IActionResult CreatePartial()
         {
-            // El TRUCO: Pasamos un EditTaskViewModel con Id = 0 para que la vista no colapse al buscar el Model.Id
+            // El TRUCO: Pasar un EditTaskViewModel con Id = 0 para que la vista no colapse al buscar el Model.Id
             return PartialView("_TaskFormPartial2", new EditTaskViewModel { Id = 0 });
         }
         //190226
@@ -177,9 +177,10 @@ namespace TaskManager.Web.Controllers
                 IsCompleted = false
             };
 
-            return PartialView("_TaskFormPartial2", model);
+            return PartialView("_TaskFormPartial2", model); //Uso de vista parcial 2 para los metodos Crear y Editar reemplazados
         }
-
+        //250226
+        //Reemplazo Partials
         [HttpGet]
         public async Task<IActionResult> EditPartial(int id)
         {
@@ -200,7 +201,7 @@ namespace TaskManager.Web.Controllers
                 IsCompleted = task.IsCompleted
             };
 
-            return PartialView("_TaskFormPartial", model);
+            return PartialView("_TaskFormPartial2", model); //Uso de vista parcial 2 para los metodos Crear y Editar reemplazados 
         }
         //260226
         [HttpPost]
