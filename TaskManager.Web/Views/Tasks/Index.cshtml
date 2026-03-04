@@ -39,15 +39,15 @@
                     <td>@(t.IsCompleted ? "Sí" : "No")</td>
                     <td>@t.Step</td>
                     <td> 
+
+                        <!--Tag Helpers: Para no escribir las url a mano y que el MVC componga correctamente los enlaces según adónde se quiera apuntar-->
                         <a asp-controller="Tasks" asp-action="Details" asp-route-id="@t.Id" class="btn btn-sm btn-primary">
                             Ver detalles </a> <!-- 30ene: Etiqueta <a> dado el método GET -->
-
-                        <a asp-action="Edit" asp-route-id="@t.Id" class="btn btn-sm btn-primary">Editar</a> <!--28ene-->
+                        <a asp-action="Edit" asp-route-id="@t.Id" class="btn btn-sm btn-primary">Editar</a> <!--28ene: Botón Editar-->
                         <form asp-action="Delete" method="post" class="d-inline">
                             <input type="hidden" name="id" value="@t.Id" />
                             <button type="submit" class="btn btn-danger btn-sm"
-                                    onclick="return confirm('¿Estás seguro de que deseas eliminar esta tarea?');">
-                                Eliminar
+                                    onclick="return confirm('¿Estás seguro de que deseas eliminar esta tarea?');">Eliminar
                             </button> 
                         </form>
                     </td>
