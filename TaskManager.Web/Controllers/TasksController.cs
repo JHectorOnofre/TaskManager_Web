@@ -34,7 +34,8 @@ namespace TaskManager.Web.Controllers
         }
 
 
-        public async Task<IActionResult> Search(TaskSearchViewModel model)
+        // INDEX 1 = /Tasks/Search
+        public async Task<IActionResult> Search(TaskSearchViewModel model) 
         {
             // Si es la primera carga de la página
             if (model.Page == 0) // antes ==
@@ -150,6 +151,15 @@ namespace TaskManager.Web.Controllers
         {
             return View();
         }
+
+
+        [HttpGet] // 12 feb
+        public async Task<IActionResult> LoadTablePartial(TaskSearchViewModel filters)
+        {
+            var result = await _client.AdvancedSearchAsync(filters);
+            return PartialView("_TaskTablePartial", result.Items);
+        }
+
 
 
     }
