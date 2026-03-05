@@ -1,4 +1,7 @@
-﻿@model TaskManager.Web.Models.TaskSearchViewModel
+﻿<!-- 4 feb
+    FORMULARIO de los filtros donde indicamos con qué datos queremos filtrar los resultados de búsqueda
+-->
+@model TaskManager.Web.Models.TaskSearchViewModel
 
 <h1>Listado de Tareas</h1>
 
@@ -37,12 +40,14 @@
 
     <div class="col-md-12 mt-3">
         <button type="submit" class="btn btn-primary">Buscar</button>
-        <a asp-action="Index2" class="btn btn-secondary">Limpiar</a>
+        <a asp-action="Index2" class="btn btn-secondary">Limpiar</a> <!--Modificado para funcionar en el Index2-->
     </div>
 
 </form>
 
-
+<!-- 4 feb
+    Para indica dónde va a inyectar (mostrar) los resultado de dichos filtros
+-->
 @if (Model.Result != null && Model.Result.Items.Any())
 {
     <table class="table table-bordered">
@@ -82,7 +87,9 @@ else
 }
 
 
-
+<!-- 4 feb
+    La paginación manteniendo los filtros que se están usando
+-->
 @if (Model.Result != null && Model.Result.TotalCount > 1)
 {
     <nav>

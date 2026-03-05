@@ -13,10 +13,24 @@ namespace TaskManager.Web.Controllers
             _client = client;
         }
 
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 10) // https:// localhost:7137/
+        //public async Task<IActionResult> Index(int page = 1, int pageSize = 10) // https:// localhost:7137/
+        //{
+        //    var result = await _client.GetTasksAsync(page, pageSize);
+        //    return View(result);
+        //}
+
+        public async Task<IActionResult> Index(TaskSearchViewModel filters) // NUEVO Index (adaptando lo visto en index2 - 4feb)
         {
-            var result = await _client.GetTasksAsync(page, pageSize);
-            return View(result);
+            
+            if (filters.Page <= 0) filters.Page = 1; //Valida que la página sea > 0
+
+            filters.PageSize = 5; // para que siempre muestre 5 registros
+
+            var result = await _client.AdvancedSearchAsync(filters); // llamada al servicio de búsqueda avanzada
+
+            filters.Result = result; // inyección de los resultados dentro del mismo modelo de filtros
+
+            return View(filters); // devolver la vista con el modelo completado (filtros + resultado)
         }
 
 
@@ -114,6 +128,15 @@ namespace TaskManager.Web.Controllers
 
 
         [HttpGet] // 4feb
+        /* Se añade lógice en un "index2" para no crear conflictos en el Index principal
+         *  
+            -> Proviene de la comunicación con el servicie "TaskApiClient"
+            -> se comunica con la interfaz "ITaskApiClient"
+            -> Se crea un index2.cshtml < Tasks < Views
+
+            * Consiste en retornar el mismo viewModel que recibimos, únicamente le asignamos sobre la propiedada "result" lo que la API haya respondido
+            (Mantener lo sdatos en el ciclo para que el usuario pueda verlos y no se pierda)
+         */
         public async Task<IActionResult> Index2(TaskSearchViewModel filters)
         {
             var result = await _client.AdvancedSearchAsync(filters);

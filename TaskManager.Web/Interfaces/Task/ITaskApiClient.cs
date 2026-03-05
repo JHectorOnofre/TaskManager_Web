@@ -18,6 +18,6 @@ namespace TaskManager.Web.Services
 
         Task<TaskViewModel> GetTaskDetailAsync (int id);//30
 
-        Task<PagedResultViewModel<TaskViewModel>> AdvancedSearchAsync(TaskSearchViewModel filters); //4feb
+        Task<PagedResultViewModel<TaskViewModel>> AdvancedSearchAsync(TaskSearchViewModel filters); //4feb (index2) & nuevo Index
     }
 }
