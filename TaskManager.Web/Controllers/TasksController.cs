@@ -203,6 +203,7 @@ namespace TaskManager.Web.Controllers
 
             return PartialView("_TaskFormPartial2", model); //Uso de vista parcial 2 para los metodos Crear y Editar reemplazados 
         }
+
         //260226
         [HttpPost]
         public async Task<IActionResult> DeleteAjax(int id)

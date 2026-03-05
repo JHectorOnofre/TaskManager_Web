@@ -69,7 +69,8 @@
                 CategoryId: parseInt(formData.get("CategoryId")) || 0,
                 Step: parseInt(formData.get("Step")) || 0,
                 // Verifica si es true (uso futuro)?) o viene del input oculto
-                IsCompleted: formData.get("IsCompleted") === "true"
+                //IsCompleted: formData.get("IsCompleted") === "true"
+                IsCompleted: form.querySelector('input[name="IsCompleted"][type="checkbox"]').checked
                 }
 
             const isEdit = data.Id && data.Id !== "0";
