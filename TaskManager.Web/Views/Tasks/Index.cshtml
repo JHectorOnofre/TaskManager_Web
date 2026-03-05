@@ -40,7 +40,10 @@
                     <td>@t.Step</td>
                     <td> 
 
-                        <!--Tag Helpers: Para no escribir las url a mano y que el MVC componga correctamente los enlaces según adónde se quiera apuntar-->
+                        <!--
+                        Tag Helpers: Para no escribir las url a mano y que el MVC componga correctamente los enlaces según adónde se quiera apuntar
+                        - parte de la forma de revisar e inyectar las rutas en el Framework de .NET
+                        -->
                         <a asp-controller="Tasks" asp-action="Details" asp-route-id="@t.Id" class="btn btn-sm btn-primary">
                             Ver detalles </a> <!-- 30ene: Etiqueta <a> dado el método GET -->
                         <a asp-action="Edit" asp-route-id="@t.Id" class="btn btn-sm btn-primary">Editar</a> <!--28ene: Botón Editar-->

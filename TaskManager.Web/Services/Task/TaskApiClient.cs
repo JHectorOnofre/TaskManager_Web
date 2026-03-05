@@ -108,7 +108,12 @@ namespace TaskManager.Web.Services
             return true;
         }
 
-        public async Task<PagedResultViewModel<TaskViewModel>> AdvancedSearchAsync(TaskSearchViewModel filters)
+        public async Task<PagedResultViewModel<TaskViewModel>> AdvancedSearchAsync(TaskSearchViewModel filters) //4feb
+            /* retorna el resultado esperado por el PagedResultViewModel (el que trae la lista de registros, los filtros aplicados y la página donde se está posicionado 
+             - dentro de éste está el otro modelo TaskViewModel para traer la lista de registros que coincidan con los criterios de búsqueda
+            - el método llamado "AdvancedSearchAsync" recibe un ViewModel de entrada llamado "TaskSearchViewModel" 
+            - 
+            */
         {
             var query = new Dictionary<string, string>();
 
