@@ -1,13 +1,15 @@
 ﻿@model IEnumerable<TaskManager.Web.Models.TaskViewModel>
 
-<table class="table table-striped table-bordered">
-    <thead>
+@* Esta tabla debe tener EXACTAMENTE las mismas clases que la de Index.cshtml para que no haya "salto" visual al recargar *@
+<table class="table table-sm table-hover table-custom-compact align-middle mb-0" style="font-size: 0.8rem;">
+    <thead class="table-dark sticky-header">
         <tr>
-            <th>Título</th>
-            <th>Categoría</th>
-            <th>Step</th>
-            <th>Completada</th>
-            <th>Acciones</th>
+            <th style="width: 30%;">TÍTULO</th>
+            <th style="width: 15%;">CATEGORÍA</th>
+            <th style="width: 10%;" class="text-center">ESTADO</th>
+            <th style="width: 10%;" class="text-center">ST</th>
+            <th style="width: 10%;" class="d-none d-lg-table-cell">FECHA</th>
+            <th style="width: 25%;" class="text-center">ACCIONES</th>
         </tr>
     </thead>
     <tbody>
@@ -16,22 +18,50 @@
             foreach (var t in Model)
             {
                 <tr>
-                    <td>@t.Title</td>
-                    <td>@t.CategoryName</td>
-                    <td>@t.Step</td>
-                    <td>@(t.IsCompleted ? "Sí" : "No")</td>
+                    <td class="fw-bold text-truncate" style="max-width: 150px;">@t.Title</td>
+                    <td><span class="badge bg-info text-dark py-1 w-100" style="font-size: 0.65rem;">@t.CategoryName</span></td>
+                    <td class="text-center">
+                        <span class="badge @(t.IsCompleted ? "bg-success" : "bg-warning text-dark") py-1 w-100" style="font-size: 0.65rem;">
+                            @(t.IsCompleted ? "SÍ" : "NO")
+                        </span>
+                    </td>
+                    <td class="text-center fw-bold">@t.Step</td>
+                    <td class="small text-muted d-none d-lg-table-cell">@t.CreatedAt.ToString("dd/MM/yy")</td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@t.Id" class="btn btn-sm btn-info">Ver</a>
-                       <!-- <--a asp-action="Edit" asp-route-id="@t.Id" class="btn btn-sm btn-warning">Editar</!--a> -->
-                        <button class="btn btn-sm btn-warning btnEdit"
-                                data-id="@t.Id">
-                            Editar
-                        </button>
+                        <div class="d-flex justify-content-center gap-1">
+                            @* Acciones con iconos y clases para JS *@
 
-                        <button class="btn btn-sm btn-danger btnDelete"
-                                data-id="@t.Id">
-                            Eliminar
-                        </button>
+                            @* Detalles (Navegación normal) *@
+                            <a asp-controller="Tasks" asp-action="Details" asp-route-id="@t.Id"
+                               class="btn btn-info btn-sm p-0 d-flex align-items-center justify-content-center"
+                               style="width: 28px; height: 28px;" title="Detalles">
+                                <i class="bi bi-eye-fill"></i>
+                            </a>
+
+                            @* Editar (Modal JS) *@
+                            <button class="btn btn-warning btn-sm p-0 d-flex align-items-center justify-content-center btnEdit"
+                                    data-id="@t.Id"
+                                    style="width: 28px; height: 28px;" title="Editar Modal">
+                                <i class="bi bi-pencil-square pe-none"></i>
+                            </button>
+
+                            @* Eliminar (AJAX JS) *@
+                            @if (t.IsCompleted)
+                            {
+                                <button class="btn btn-secondary btn-sm p-0 d-flex align-items-center justify-content-center"
+                                        style="width: 28px; height: 28px;" disabled title="No eliminable">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-danger btn-sm p-0 d-flex align-items-center justify-content-center btnDelete"
+                                        data-id="@t.Id"
+                                        style="width: 28px; height: 28px;" title="Eliminar AJAX">
+                                    <i class="bi bi-trash3 pe-none"></i>
+                                </button>
+                            }
+                        </div>
                     </td>
                 </tr>
             }

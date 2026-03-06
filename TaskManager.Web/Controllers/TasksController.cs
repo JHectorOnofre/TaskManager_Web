@@ -15,9 +15,18 @@ namespace TaskManager.Web.Controllers
         }
 
         // Arreglo DCC improvisado 230126
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(TaskSearchViewModel filters)
         {
-            var model = await _taskService.GetIndexModelAsync(page, pageSize);
+            // 1. Configurar valores por defecto si es la primera carga de pagina
+            if (filters.Page == 0) filters.Page = 1;
+            if (filters.PageSize == 0) filters.PageSize = 20;
+
+            // 2. Llamar al servicio usando la búsqueda avanzada
+            // Esto procesará cualquier filtro (Text, CategoryId, etc.) que venga del formulario
+            var model = await _taskService.AdvancedSearchAsync(filters);
+
+            // 3. Retornar la vista. 
+            // Al pasar 'model', los inputs del formulario mantendrán el texto que el usuario escribió.
             return View(model);
         }
 
