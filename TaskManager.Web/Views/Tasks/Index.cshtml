@@ -38,7 +38,7 @@
         z-index: 10;
     }
 
-    /* Clase utilitaria para que los iconos no interfieran con el click del botón (Crucial para task-modal.js) */
+    /* Utilería para evitar que el clic se registre en el ícono en lugar del botón en JS */
     .pe-none {
         pointer-events: none;
     }
@@ -46,36 +46,28 @@
 
 <div class="compact-layout-container">
 
-    @* Bloque de alertas (Envuelto en id="alertContainer" para que el JS pueda inyectar mensajes AJAX) *@
+    @* Bloque de alertas (Optimizado para una sola línea) - Envuelto en alertContainer para JS *@
     <div id="alertContainer">
         @if (TempData["Success"] != null)
         {
-            <div class="alert alert-success py-1 mb-1 small alert-dismissible fade show">
-                @TempData["Success"]
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
+            <div class="alert alert-success py-1 mb-1 small">@TempData["Success"]</div>
         }
 
         @if (TempData["Error"] != null)
         {
-            <div class="alert alert-danger py-1 mb-1 small alert-dismissible fade show">
-                @TempData["Error"]
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
+            <div class="alert alert-danger py-1 mb-1 small">@TempData["Error"]</div>
         }
 
         @* Integración de V2: Carga de alertas por parcial si existe *@
         <partial name="_AlertMessages" />
     </div>
 
-    @* Cabecera principal con botón de creación MODIFICADO para Modal *@
+    @* Cabecera principal con botón de creación rápida (Integración de V1) *@
     <div class="d-flex justify-content-between align-items-center mb-1">
         <h1 class="h5 mb-0 fw-bold">TAREAS</h1>
-
-        @* CAMBIO: Usamos <button> con id="btnCrearTask" en lugar de <a> para el Modal *@
-        <button id="btnCrearTask" class="btn btn-success btn-sm py-1 shadow-sm px-3" style="font-size: 0.75rem; height: 32px; display: flex; align-items: center;">
-            <i class="bi bi-plus-lg me-1 pe-none"></i> NUEVA TAREA
-        </button>
+        <a href="/Tasks/Create" class="btn btn-success btn-sm py-1 shadow-sm px-3" style="font-size: 0.75rem; height: 32px; display: flex; align-items: center;">
+            <i class="bi bi-plus-lg me-1"></i> NUEVA TAREA
+        </a>
     </div>
 
     @* Bloque de Filtros (Card de V1 con inputs de V2 para ID de categoría) *@
@@ -125,7 +117,7 @@
     }
     else
     {
-        @* Listado de Tareas: Tabla compacta con Badges de V1 y Lógica de borrado de Index.cshtml *@
+        @* Listado de Tareas: Tabla compacta con Badges de V1 y Lógica de borrado AJAX *@
         <div id="taskTableContainer" class="table-responsive-dynamic rounded shadow-sm">
             <table class="table table-sm table-hover table-custom-compact align-middle mb-0" style="font-size: 0.8rem;">
                 <thead class="table-dark sticky-header">
@@ -153,21 +145,16 @@
                             <td class="small text-muted d-none d-lg-table-cell">@t.CreatedAt.ToString("dd/MM/yy")</td>
                             <td>
                                 <div class="d-flex justify-content-center gap-1">
-                                    @* Acciones con iconos distinguibles pero de tamaño unificado *@
-
-                                    @* Detalles: Se mantiene navegación normal *@
+                                    @* Acciones con iconos distinguibles pero de tamaño unificado para responsividad *@
                                     <a asp-controller="Tasks" asp-action="Details" asp-route-id="@t.Id" class="btn btn-info btn-sm p-0 d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;" title="Detalles">
                                         <i class="bi bi-eye-fill"></i>
                                     </a>
+                                    
+                                    <a asp-action="Edit" asp-route-id="@t.Id" class="btn btn-warning btn-sm p-0 d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;" title="Editar">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
 
-                                    @* CAMBIO: Botón Editar con clase .btnEdit para el Modal *@
-                                    <button class="btn btn-warning btn-sm p-0 d-flex align-items-center justify-content-center btnEdit"
-                                            data-id="@t.Id"
-                                            style="width: 28px; height: 28px;" title="Editar Modal">
-                                        <i class="bi bi-pencil-square pe-none"></i>
-                                    </button>
-
-                                    @* Lógica original: No permite eliminar tareas completadas *@
+                                    @* Lógica original de Index.cshtml: No permite eliminar tareas completadas *@
                                     @if (t.IsCompleted)
                                     {
                                         <button class="btn btn-secondary btn-sm p-0 d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;" disabled title="No eliminable">
@@ -176,10 +163,8 @@
                                     }
                                     else
                                     {
-                                        @* CAMBIO: Botón Eliminar con clase .btnDelete para AJAX *@
-                                        <button class="btn btn-danger btn-sm p-0 d-flex align-items-center justify-content-center btnDelete"
-                                                data-id="@t.Id"
-                                                style="width: 28px; height: 28px;" title="Eliminar AJAX">
+                                        @* Integración Modal: Botón disparador de evento AJAX *@
+                                        <button type="button" class="btn btn-danger btn-sm p-0 d-flex align-items-center justify-content-center btnDelete" data-id="@t.Id" style="width: 28px; height: 28px;" title="Eliminar (Modal)">
                                             <i class="bi bi-trash3 pe-none"></i>
                                         </button>
                                     }
@@ -199,7 +184,7 @@
         var currentPage = Model?.Page ?? 1;
         var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
 
-        /* Lógica para limitar a 5 páginas visibles para mejorar responsividad en resoluciones bajas */
+        @* Lógica para limitar a 5 páginas visibles para mejorar responsividad en resoluciones bajas *@
         int maxVisiblePages = 10;
         int startPage = Math.Max(1, currentPage - (maxVisiblePages / 2));
         int endPage = Math.Min(totalPages, startPage + maxVisiblePages - 1);
@@ -208,7 +193,7 @@
             startPage = Math.Max(1, endPage - maxVisiblePages + 1);
         }
 
-        /* Lógica para saltos de decenas */
+        @* Lógica para saltos de decenas *@
         int currentDecade = (int)(Math.Floor((double)(currentPage - 1) / 10) * 10);
     }
 
@@ -267,33 +252,14 @@
     }
 </div>
 
-@* ========================================================== *@
-@* ELEMENTOS AGREGADOS PARA MODAL (REQUERIDO POR TASK-MODAL.JS) *@
-@* ========================================================== *@
-
-<div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
+<div class="modal fade" id="taskModal" tabindex="-1">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="taskModalLabel">Gestión de Tarea</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div id="taskModalContent">
-            </div>
+        <div class="modal-content" id="taskModalContent">
         </div>
     </div>
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-
-    @* Script de lógica de modales (Crear/Editar) *@
+    <script src="~/js/Task/tasks-partial.js"></script>
     <script src="~/js/Task/task-modal.js"></script>
-
-    @* NOTA: task-ajax.js podría ser redundante si task-modal.js ya maneja todo (incluyendo borrar), 
-       pero lo mantenemos comentado por si acaso tienes otra funcionalidad ahí. 
-    *@
-    @* <script src="~/js/Task/task-ajax.js"></script> *@
 }
