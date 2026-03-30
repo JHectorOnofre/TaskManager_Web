@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TaskManager.Web.Interfaces.Business;
 using TaskManager.Web.Models;
-using TaskManager.Web.Services.Business;
 using TaskManager.Web.Utilities.Exceptions; // Referencia a la nueva capa
 
 namespace TaskManager.Web.Controllers
@@ -15,9 +15,18 @@ namespace TaskManager.Web.Controllers
         }
 
         // Arreglo DCC improvisado 230126
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(TaskSearchViewModel filters)
         {
-            var model = await _taskService.GetIndexModelAsync(page, pageSize);
+            // 1. Configurar valores por defecto si es la primera carga de pagina
+            if (filters.Page == 0) filters.Page = 1;
+            if (filters.PageSize == 0) filters.PageSize = 20;
+
+            // 2. Llamar al servicio usando la búsqueda avanzada
+            // Esto procesará cualquier filtro (Text, CategoryId, etc.) que venga del formulario
+            var model = await _taskService.AdvancedSearchAsync(filters);
+
+            // 3. Retornar la vista. 
+            // Al pasar 'model', los inputs del formulario mantendrán el texto que el usuario escribió.
             return View(model);
         }
 
@@ -84,7 +93,7 @@ namespace TaskManager.Web.Controllers
             }
             return View(task);
         }
-
+        //Edit con alert
         public async Task<IActionResult> Edit(int? id)
         {
             var task = await _taskService.GetTaskForEditAsync(id);
@@ -131,7 +140,7 @@ namespace TaskManager.Web.Controllers
         [HttpGet]
         public IActionResult AjaxDemo() => View();
 
-        //120226 Partial Views GAdaptsacion
+        //120226 Partial Views GAdaptacion
         [HttpGet]
         public async Task<IActionResult> LoadTablePartial(TaskSearchViewModel filters)
         {
@@ -148,7 +157,7 @@ namespace TaskManager.Web.Controllers
         [HttpGet]
         public IActionResult CreatePartial()
         {
-            // El TRUCO: Pasamos un EditTaskViewModel con Id = 0 para que la vista no colapse al buscar el Model.Id
+            // El TRUCO: Pasar un EditTaskViewModel con Id = 0 para que la vista no colapse al buscar el Model.Id
             return PartialView("_TaskFormPartial2", new EditTaskViewModel { Id = 0 });
         }
         //190226
@@ -177,9 +186,10 @@ namespace TaskManager.Web.Controllers
                 IsCompleted = false
             };
 
-            return PartialView("_TaskFormPartial2", model);
+            return PartialView("_TaskFormPartial2", model); //Uso de vista parcial 2 para los metodos Crear y Editar reemplazados
         }
-
+        //250226
+        //Reemplazo Partials
         [HttpGet]
         public async Task<IActionResult> EditPartial(int id)
         {
@@ -200,8 +210,9 @@ namespace TaskManager.Web.Controllers
                 IsCompleted = task.IsCompleted
             };
 
-            return PartialView("_TaskFormPartial", model);
+            return PartialView("_TaskFormPartial2", model); //Uso de vista parcial 2 para los metodos Crear y Editar reemplazados 
         }
+
         //260226
         [HttpPost]
         public async Task<IActionResult> DeleteAjax(int id)

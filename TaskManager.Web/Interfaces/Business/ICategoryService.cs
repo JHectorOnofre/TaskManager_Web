@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using TaskManager.Web.Models;
 
-namespace TaskManager.Web.Services.Business
+namespace TaskManager.Web.Interfaces.Business
 {
     public interface ICategoryService
     {

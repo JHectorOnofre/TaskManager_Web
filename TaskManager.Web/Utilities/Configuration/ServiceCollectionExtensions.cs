@@ -1,6 +1,8 @@
 ﻿using TaskManager.Web.Http;
-using TaskManager.Web.Services;
+using TaskManager.Web.Interfaces.Business;
+using TaskManager.Web.Interfaces.Infrastructure;
 using TaskManager.Web.Services.Business;
+using TaskManager.Web.Services.Infrastructure;
 
 namespace TaskManager.Web.Extensions
 {
@@ -8,7 +10,7 @@ namespace TaskManager.Web.Extensions
     {
         public static IServiceCollection AddApiClients(this IServiceCollection services)
         {
-            // 1. Clientes de API (Capa de Infraestructura)
+            // 1. Clientes de API (Capa de Infraestructura) -   BUSCA LOS DATOS
             //170226 ciomenta  services.AddHttpClient<ITaskApiClient, TaskApiClient>();
             // services.AddHttpClient<ICategoryApiClient, CategoryApiClient>();
 
@@ -19,7 +21,7 @@ namespace TaskManager.Web.Extensions
 
             services.AddHttpClient<ICategoryApiClient, CategoryApiClient>()
                     .AddHttpMessageHandler<ApiExceptionHandler>();
-            // 2. Servicios de Negocio (Service Layer)
+            // 2. Servicios de Negocio (Service Layer) -        PROCESA
             // Se usa AddScoped para que el servicio viva lo que dura la petición HTTP
             services.AddScoped<ITaskService, TaskService>(); //IMplementacióin de Service Layer
             services.AddScoped<ICategoryService, CategoryService>(); //IMplementacióin de Service Layer

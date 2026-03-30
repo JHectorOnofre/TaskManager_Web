@@ -1,8 +1,9 @@
 ﻿using System.Net.Http.Json;
 using TaskManager.Web.Models;
 using System.Net.Http.Headers;
+using TaskManager.Web.Interfaces.Infrastructure;
 
-namespace TaskManager.Web.Services
+namespace TaskManager.Web.Services.Infrastructure
 {
     public class TaskApiClient : ITaskApiClient
     {

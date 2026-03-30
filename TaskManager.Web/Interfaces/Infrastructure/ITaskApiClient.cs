@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using TaskManager.Web.Models;
 
-namespace TaskManager.Web.Services
+namespace TaskManager.Web.Interfaces.Infrastructure
 {
     public interface ITaskApiClient
     {

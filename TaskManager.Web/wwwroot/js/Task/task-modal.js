@@ -45,6 +45,7 @@
             const html = await response.text();
 
             modalContent.innerHTML = html;
+            console.log("Hola");
             // 🔹 Cargar categorías después de insertar el HTML
             await loadCategoriesInModal(modalContent);
             modal.show();
@@ -68,7 +69,8 @@
                 CategoryId: parseInt(formData.get("CategoryId")) || 0,
                 Step: parseInt(formData.get("Step")) || 0,
                 // Verifica si es true (uso futuro)?) o viene del input oculto
-                IsCompleted: formData.get("IsCompleted") === "true"
+                //IsCompleted: formData.get("IsCompleted") === "true"
+                IsCompleted: form.querySelector('input[name="IsCompleted"][type="checkbox"]').checked
                 }
 
             const isEdit = data.Id && data.Id !== "0";
@@ -151,13 +153,13 @@ async function refreshTable() {
 //240226
 // Función para cargar las categorías en el select del modal 240226
 async function loadCategoriesInModal(modalContent) {
-
+    console.log("Hola");
     const select = modalContent.querySelector("#categorySelect");
     if (!select) return;
 
     // Valor actual (cuando edito)
     const selectedId = select.dataset.selectedCategoryId || "";
-
+    console.log(select.dataset);
     try {
         const response = await fetch("/Categories/Options");
 

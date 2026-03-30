@@ -3,10 +3,11 @@ using Microsoft.Extensions.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using TaskManager.Web.Interfaces.Infrastructure;
 using TaskManager.Web.Models;
 using TaskManager.Web.Utilities.Exceptions;
 
-namespace TaskManager.Web.Services
+namespace TaskManager.Web.Services.Infrastructure
 {
     public class CategoryApiClient : ICategoryApiClient
     {
