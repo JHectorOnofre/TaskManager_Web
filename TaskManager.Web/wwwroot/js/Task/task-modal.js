@@ -3,20 +3,8 @@
 
     const modal = new bootstrap.Modal(document.getElementById("taskModal"));
     const modalContent = document.getElementById("taskModalContent");
-    /*240226
-    // Nueva función para cargar categorías 190226
-    async function fillCategoriesSelect(selectedId) {
-        const select = document.getElementById("CategoryIdSelect");
-        const response = await fetch("/Categories/GetCategoriesJson");
-        const categories = await response.json();
 
-        select.innerHTML = '<option value="">-- Sin Categoria --</option>';
-        categories.forEach(cat => {
-            const isSelected = cat.id == selectedId ? "selected" : "";
-            select.innerHTML += `<option value="${cat.id}" ${isSelected}>${cat.name}</option>`;
-        });
-    }
-    */
+
     // CREAR
     document.getElementById("btnCrearTask")
         .addEventListener("click", async () => {
@@ -28,10 +16,11 @@
             const html = await response.text();
 
             modalContent.innerHTML = html;
-            // 🔹 Cargar categorías después de insertar el HTML 240226
+
             await loadCategoriesInModal(modalContent);
             modal.show();
         });
+
 
     // EDITAR
     document.addEventListener("click", async (e) => {
@@ -46,14 +35,12 @@
 
             modalContent.innerHTML = html;
             console.log("Hola");
-            // 🔹 Cargar categorías después de insertar el HTML
+            
             await loadCategoriesInModal(modalContent);
             modal.show();
-
-          //  const categoryId = document.getElementById("currentCategoryId").value;
-           // await fillCategoriesSelect(categoryId);
         }
     });
+
 
     // GUARDAR
     document.addEventListener("click", async (e) => {
@@ -68,7 +55,6 @@
                 Title: formData.get("Title"),
                 CategoryId: parseInt(formData.get("CategoryId")) || 0,
                 Step: parseInt(formData.get("Step")) || 0,
-                // Verifica si es true (uso futuro)?) o viene del input oculto
                 //IsCompleted: formData.get("IsCompleted") === "true"
                 IsCompleted: form.querySelector('input[name="IsCompleted"][type="checkbox"]').checked
                 }
@@ -98,7 +84,9 @@
             await refreshTable();
         }
     });
-    //ELIMINAR 260226 
+
+
+    //ELIMINAR 
     document.addEventListener("click", async (e) => {
         if (e.target.matches(".btnDelete")) {
 
@@ -134,7 +122,7 @@
 
 
 });
-// Función spinnerHtml
+
 function spinnerHtml() {
     return `
         <div class="modal-body text-center">
@@ -143,21 +131,19 @@ function spinnerHtml() {
         </div>`;
 }
 
-// Función refreshTable
+
 async function refreshTable() {
     const response = await fetch("/Tasks/LoadTablePartial");
     const html = await response.text();
     document.getElementById("taskTableContainer").innerHTML = html;
 }
 
-//240226
-// Función para cargar las categorías en el select del modal 240226
+
 async function loadCategoriesInModal(modalContent) {
     console.log("Hola");
     const select = modalContent.querySelector("#categorySelect");
     if (!select) return;
 
-    // Valor actual (cuando edito)
     const selectedId = select.dataset.selectedCategoryId || "";
     console.log(select.dataset);
     try {
@@ -170,7 +156,6 @@ async function loadCategoriesInModal(modalContent) {
 
         const categories = await response.json();
 
-        // Limpiamos las opciones actuales excepto la primera
         const firstOption = select.querySelector("option[value='']");
         select.innerHTML = "";
         if (firstOption) {
@@ -182,7 +167,6 @@ async function loadCategoriesInModal(modalContent) {
             select.appendChild(defaultOpt);
         }
 
-        // Agregamos las categorías
         categories.forEach(cat => {
             const opt = document.createElement("option");
             opt.value = cat.id;
@@ -200,7 +184,7 @@ async function loadCategoriesInModal(modalContent) {
     }
 }
 
-// ✅ Funciones auxiliares para mostrar mensajes 260226
+
 function showSuccess(message) {
     const container = document.getElementById("alertContainer");
     if (!container) return;
@@ -211,6 +195,19 @@ function showSuccess(message) {
            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
        </div>`;
 }
+
+
+//function showSuccesstest(message) { // 30 marzo: Ej. de Modularidad reutilizando función de core.js
+    
+//    if (!ns.core.$alert) return;
+
+//    ns.core.$alert.innerHTML = `
+//       <div class="alert alert-success alert-dismissible fade show" role="alert">
+//           ${message}
+//           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+//       </div>`;
+//}
+
 
 function showError(message) {
     const container = document.getElementById("alertContainer");
