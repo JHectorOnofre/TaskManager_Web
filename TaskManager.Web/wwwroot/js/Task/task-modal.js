@@ -1,9 +1,26 @@
-﻿document.addEventListener("DOMContentLoaded", () => {
+﻿/*  De la Arquitectura Modular
+
+* Actualmente: Se hacen 3 cosas en un mismo bloque: buscar un Id, llamar a una URL y mostrar el resultado
+
+* Distribución: 
+    - core.js       ->  URLs 
+    - api.js        ->  $ajax 
+    - service.js    ->  lógicas y manipulación del DOM    
+    - utilities.js  ->  
+    - events.js     ->  
+
+
+
+*/
+
+
+ocument.addEventListener("DOMContentLoaded", () => {
 
 
     const modal = new bootstrap.Modal(document.getElementById("taskModal"));
     const modalContent = document.getElementById("taskModalContent");
 
+    // agg filtros de búsqueda 
 
     // CREAR
     document.getElementById("btnCrearTask")
@@ -30,7 +47,7 @@
 
             modalContent.innerHTML = spinnerHtml();
 
-            const response = await fetch('/Tasks/EditPartial/' + id);
+            const response = await fetch('/Tasks/EditPartial/' + id); //url = core
             const html = await response.text();
 
             modalContent.innerHTML = html;
@@ -133,7 +150,7 @@ function spinnerHtml() {
 
 
 async function refreshTable() {
-    const response = await fetch("/Tasks/LoadTablePartial");
+    const response = await fetch("/Tasks/LoadTablePartial"); //core
     const html = await response.text();
     document.getElementById("taskTableContainer").innerHTML = html;
 }
@@ -219,3 +236,5 @@ function showError(message) {
            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
        </div>`;
 }
+
+
